@@ -242,7 +242,7 @@ body{background:#07071A;display:flex;justify-content:center;align-items:center;m
 .detail-tags{padding:16px 24px;display:flex;gap:8px;flex-wrap:wrap}
 .detail-desc-title{font-family:'Playfair Display',serif;font-size:18px;color:var(--text);padding:0 24px;margin-bottom:10px}
 .detail-desc{font-size:14px;color:var(--text2);line-height:1.8;padding:0 24px;margin-bottom:24px}
-.detail-actions{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:390px;padding:16px 24px 32px;background:linear-gradient(transparent,var(--bg) 30%);display:flex;gap:12px}
+.detail-actions{position:absolute;bottom:0;left:0;right:0;padding:16px 24px 32px;background:linear-gradient(transparent,var(--bg) 30%);display:flex;gap:12px}
 .btn-outline{flex:1;padding:15px;background:transparent;color:var(--text);font-family:'Inter',sans-serif;font-size:15px;font-weight:600;border:1.5px solid var(--border);border-radius:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px}
 .btn-read{flex:2;padding:15px;background:var(--coral);color:#fff;font-family:'Inter',sans-serif;font-size:15px;font-weight:600;border:none;border-radius:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px}
 
@@ -414,6 +414,61 @@ body{background:#07071A;display:flex;justify-content:center;align-items:center;m
 .c11{background:linear-gradient(160deg,#0a1628,#1a3a6b,#2980B9)}
 .c12{background:linear-gradient(160deg,#1a0a28,#6C2D8C,#E8694A)}
 
+
+/* ── IMPROVEMENTS ── */
+/* Toast notifications */
+#toast-container{position:absolute;bottom:100px;left:50%;transform:translateX(-50%);z-index:9999;display:flex;flex-direction:column;gap:8px;align-items:center;pointer-events:none;width:340px}
+.toast{background:rgba(30,32,64,.96);backdrop-filter:blur(12px);color:var(--text);padding:12px 18px;border-radius:14px;font-size:13px;font-weight:500;border:1px solid rgba(255,255,255,.1);box-shadow:0 8px 24px rgba(0,0,0,.4);opacity:0;transform:translateY(12px);transition:all .3s ease;text-align:center;white-space:nowrap}
+.toast.show{opacity:1;transform:translateY(0)}
+.toast.success{border-color:rgba(76,175,130,.4);color:#4CAF82}
+.toast.gold{border-color:rgba(212,168,67,.4);color:var(--gold)}
+/* Better button press feel */
+.btn-primary:active,.btn-gold:active,.btn-read:active{transform:scale(.97)}
+/* Book card hover lift */
+.book-card:hover .book-cover{transform:translateY(-6px) scale(1.02)}
+.book-cover{transition:transform .25s ease}
+/* Plan card selected state */
+.plan-card.selected{border-color:var(--coral)!important;background:rgba(232,105,74,.06)!important}
+.plan-card.selected::after{content:'✓ Selected';position:absolute;top:12px;right:14px;font-size:11px;font-weight:700;color:var(--coral)}
+/* Pulsing CTA */
+@keyframes ctaPulse{0%,100%{box-shadow:0 0 0 0 rgba(232,105,74,.4)}70%{box-shadow:0 0 0 10px rgba(232,105,74,0)}}
+.pulse{animation:ctaPulse 2s ease infinite}
+/* Wishlist animation */
+@keyframes heartPop{0%{transform:scale(1)}50%{transform:scale(1.4)}100%{transform:scale(1)}}
+.heart-pop{animation:heartPop .3s ease}
+/* Skeleton loading */
+@keyframes shimmer{0%{background-position:-200% 0}100%{background-position:200% 0}}
+.skeleton{background:linear-gradient(90deg,var(--surface) 25%,var(--surface2) 50%,var(--surface) 75%);background-size:200% 100%;animation:shimmer 1.5s infinite;border-radius:8px}
+/* OTP box active animation */
+.otp-box.active-box{border-color:var(--coral)!important;box-shadow:0 0 0 3px rgba(232,105,74,.2);animation:none}
+/* Genre tab underline indicator */
+.genre-tab.active{position:relative}
+/* Search input focus ring */
+.search-input-row:focus-within{border-color:var(--coral)!important}
+/* Download button states */
+.btn-downloading{background:rgba(212,168,67,.15)!important;color:var(--gold)!important;border-color:rgba(212,168,67,.4)!important;pointer-events:none}
+.btn-downloaded{background:rgba(76,175,130,.15)!important;color:var(--success)!important;border-color:rgba(76,175,130,.4)!important}
+/* Smooth reader progress */
+.reader-progress-fill{transition:width .3s ease}
+/* Better overlay for settings */
+#s-settings{justify-content:flex-end}
+/* Ripple effect */
+.ripple{position:absolute;border-radius:50%;background:rgba(255,255,255,.15);transform:scale(0);animation:rippleAnim .6s linear;pointer-events:none}
+@keyframes rippleAnim{to{transform:scale(4);opacity:0}}
+/* Badge on profile nav */
+.nav-badge{position:absolute;top:2px;right:10px;width:8px;height:8px;background:var(--coral);border-radius:50%;border:1.5px solid var(--surface)}
+.nav-item{position:relative}
+/* Payment success check animation */
+@keyframes checkDraw{from{stroke-dashoffset:100}to{stroke-dashoffset:0}}
+/* Reading mode dark theme */
+.reader-dark{background:#1A1612!important}
+.reader-dark .reader-text,.reader-dark .reader-book-title,.reader-dark .reader-chapter{color:#C8BFA8!important}
+.reader-dark .reader-topbar,.reader-dark .reader-bottombar{background:linear-gradient(#1A1612,transparent)!important}
+.reader-dark .reader-progress-track{background:rgba(255,255,255,.1)!important}
+.reader-dark .reader-page-info,.reader-dark .reader-progress-pct{color:#8B7355!important}
+.reader-sepia{background:#E8D9B5!important}
+.reader-sepia .reader-text{color:#3D2B1A!important}
+
 </style>
 </head>
 
@@ -427,6 +482,7 @@ body{background:#07071A;display:flex;justify-content:center;align-items:center;m
 
 <div class="frame" id="frame">
   <div class="notch"></div>
+  <div id="toast-container"></div>
   <div class="status-bar">
     <span class="status-time">9:41</span>
     <div class="status-icons">
@@ -463,7 +519,7 @@ body{background:#07071A;display:flex;justify-content:center;align-items:center;m
       <div class="welcome-title">Every story<br>you'll ever <em>love</em>,<br>one subscription.</div>
       <div class="welcome-sub">50,000+ books. One price. Read anywhere — even offline.</div>
       <div class="welcome-btns">
-        <button class="btn-primary" onclick="go('s-signup')">Get Started — Free 14-Day Trial</button>
+        <button class="btn-primary pulse" onclick="go('s-signup')">Get Started — Free 14-Day Trial</button>
         <div class="divider-row"><div class="divider-line"></div><span class="divider-text">or continue with</span><div class="divider-line"></div></div>
         <div class="social-row">
           <button class="social-btn" onclick="go('s-otp')">🇬 Google</button>
@@ -707,7 +763,7 @@ body{background:#07071A;display:flex;justify-content:center;align-items:center;m
     <div class="detail-desc-title">About this book</div>
     <div class="detail-desc" id="detail-desc">Somewhere out beyond the edge of the universe there is a library that contains an infinite number of books, each one the story of another reality. One tells the story of your life as it is, along with another book for the other life you could have lived if you had made a different choice at any point in your life. While we all wonder how our lives might have been, what if you had the chance to go to the library and see for yourself?</div>
     <div class="detail-actions">
-      <button class="btn-outline" onclick="handleDownload()">⬇ Download</button>
+      <button class="btn-outline" onclick="handleDownload(event)">⬇ Download</button>
       <button class="btn-read" onclick="go('s-reader')">📖 Read Now</button>
     </div>
   </div>
@@ -1042,6 +1098,222 @@ function scaleFrame() {
 }
 scaleFrame();
 window.addEventListener('resize', scaleFrame);
+
+/* ═══════════ IMPROVEMENTS ═══════════ */
+
+// ── Toast system ──────────────────────
+function showToast(msg, type='', duration=2500) {
+  const container = document.getElementById('toast-container');
+  const t = document.createElement('div');
+  t.className = 'toast ' + type;
+  t.textContent = msg;
+  container.appendChild(t);
+  requestAnimationFrame(() => { requestAnimationFrame(() => { t.classList.add('show'); }); });
+  setTimeout(() => {
+    t.classList.remove('show');
+    setTimeout(() => t.remove(), 350);
+  }, duration);
+}
+
+// ── Swipe gesture (go back) ───────────
+(function() {
+  let startX = 0, startY = 0;
+  const frame = document.getElementById('frame');
+  frame.addEventListener('touchstart', e => { startX = e.touches[0].clientX; startY = e.touches[0].clientY; }, {passive:true});
+  frame.addEventListener('touchend', e => {
+    const dx = e.changedTouches[0].clientX - startX;
+    const dy = Math.abs(e.changedTouches[0].clientY - startY);
+    if (dx > 60 && dy < 80 && history.length > 1) back();
+  }, {passive:true});
+})();
+
+// ── Plan card selection ───────────────
+document.querySelectorAll('.plan-card').forEach(card => {
+  card.addEventListener('click', function() {
+    document.querySelectorAll('.plan-card').forEach(c => c.classList.remove('selected'));
+    this.classList.add('selected');
+  });
+});
+
+// ── Ripple effect on buttons ──────────
+function addRipple(e) {
+  const btn = e.currentTarget;
+  const r = document.createElement('span');
+  r.className = 'ripple';
+  const rect = btn.getBoundingClientRect();
+  const size = Math.max(rect.width, rect.height);
+  r.style.cssText = `width:${size}px;height:${size}px;left:${e.clientX-rect.left-size/2}px;top:${e.clientY-rect.top-size/2}px`;
+  btn.style.position = 'relative'; btn.style.overflow = 'hidden';
+  btn.appendChild(r);
+  setTimeout(() => r.remove(), 600);
+}
+document.querySelectorAll('.btn-primary,.btn-gold,.btn-read').forEach(b => b.addEventListener('click', addRipple));
+
+// ── Download with progress animation ──
+function handleDownload(e) {
+  if(e) e.stopPropagation();
+  const btns = document.querySelectorAll('#s-bookdetail .btn-outline');
+  btns.forEach(btn => {
+    if(btn.textContent.includes('Download') || btn.textContent.includes('Downloading') || btn.textContent.includes('Downloaded')) {
+      if(btn.textContent.includes('Downloaded')) { showToast('✅ Already in your downloads', 'success'); return; }
+      btn.textContent = '⏳ 0%';
+      btn.className = 'btn-outline btn-downloading';
+      let pct = 0;
+      const iv = setInterval(() => {
+        pct += Math.floor(Math.random() * 18) + 8;
+        if(pct >= 100) { clearInterval(iv); btn.textContent = '✅ Downloaded'; btn.className = 'btn-outline btn-downloaded'; showToast('📥 Book saved for offline reading', 'success'); return; }
+        btn.textContent = `⏳ ${pct}%`;
+      }, 250);
+    }
+  });
+}
+
+// ── Wishlist with animation + toast ───
+function toggleWish() {
+  const id = window._currentBook;
+  if(!id) return;
+  wishlist[id] = !wishlist[id];
+  const wb = document.getElementById('wishBtn');
+  wb.textContent = wishlist[id] ? '❤️' : '🤍';
+  wb.classList.add('heart-pop');
+  setTimeout(() => wb.classList.remove('heart-pop'), 300);
+  showToast(wishlist[id] ? '❤️ Added to Wishlist' : '🤍 Removed from Wishlist', wishlist[id] ? 'gold' : '');
+}
+
+// ── Reader: scroll-based progress ─────
+const readerContent = document.querySelector('.reader-content');
+const progressFill = document.querySelector('.reader-progress-fill');
+const progressPct  = document.querySelector('.reader-progress-pct');
+const pageInfo     = document.querySelector('.reader-page-info');
+if(readerContent) {
+  readerContent.addEventListener('scroll', () => {
+    const pct = Math.min(100, Math.round((readerContent.scrollTop / (readerContent.scrollHeight - readerContent.clientHeight)) * 77 + 23));
+    const pages = Math.round(288 * pct / 100);
+    const remH = Math.floor((288 - pages) * 0.87 / 60);
+    const remM = Math.round(((288 - pages) * 0.87) % 60);
+    progressFill.style.width = pct + '%';
+    progressPct.textContent = pct + '%';
+    pageInfo.textContent = `Page ${pages} of 288 · ~${remH}h ${remM}m remaining`;
+  });
+}
+
+// ── Reader: theme switching ────────────
+document.querySelectorAll('.theme-btn').forEach(btn => {
+  btn.addEventListener('click', function() {
+    document.querySelectorAll('.theme-btn').forEach(b => b.classList.remove('active'));
+    this.classList.add('active');
+    const reader = document.getElementById('s-reader');
+    reader.classList.remove('reader-dark','reader-sepia');
+    if(this.classList.contains('theme-dark')) reader.classList.add('reader-dark');
+    if(this.classList.contains('theme-sepia')) reader.classList.add('reader-sepia');
+    showToast('Theme applied ✓', 'success');
+  });
+});
+
+// ── Reader: font size slider ──────────
+let fontSize = 17;
+document.querySelectorAll('.font-btn').forEach((btn, i) => {
+  btn.addEventListener('click', () => {
+    fontSize = i === 0 ? Math.max(13, fontSize - 2) : Math.min(24, fontSize + 2);
+    document.querySelector('.reader-text').style.fontSize = fontSize + 'px';
+    const fill = document.querySelector('.font-size-fill');
+    const thumb = document.querySelector('.font-size-thumb');
+    const pct = ((fontSize - 13) / 11) * 100;
+    if(fill) fill.style.width = pct + '%';
+    if(thumb) { thumb.style.left = pct + '%'; }
+  });
+});
+
+// ── Font selector in reader settings ──
+document.querySelectorAll('.font-btn-sel').forEach(btn => {
+  btn.addEventListener('click', function() {
+    document.querySelectorAll('.font-btn-sel').forEach(b => b.classList.remove('active'));
+    this.classList.add('active');
+    const fontMap = {'Lora':"'Lora',serif",'Georgia':"Georgia,serif",'Inter':"'Inter',sans-serif"};
+    const chosen = fontMap[this.textContent.trim()] || "'Lora',serif";
+    document.querySelector('.reader-text').style.fontFamily = chosen;
+  });
+});
+
+// ── OTP: simulate typing on verify ────
+(function() {
+  const otpBoxes = document.querySelectorAll('.otp-box');
+  let otpFilled = 4; // already 4 filled
+  if(!otpBoxes.length) return;
+  // When user taps the OTP screen, auto-fill remaining
+  document.getElementById('s-otp').addEventListener('click', function autoFill() {
+    if(otpFilled >= 6) return;
+    otpBoxes[otpFilled].classList.add('filled');
+    otpBoxes[otpFilled].textContent = Math.floor(Math.random()*9+1);
+    otpFilled++;
+    if(otpFilled === 5) { otpBoxes[4].classList.remove('active-box'); }
+    if(otpFilled === 6) {
+      setTimeout(() => {
+        showToast('✅ Email verified!', 'success');
+        setTimeout(() => go('s-plans'), 700);
+      }, 400);
+    }
+  });
+})();
+
+// ── Home: genre tab book filtering ────
+(function() {
+  const allBooks = document.querySelectorAll('#s-home .books-row');
+  document.querySelectorAll('#s-home .genre-tab').forEach(tab => {
+    tab.addEventListener('click', function() {
+      document.querySelectorAll('#s-home .genre-tab').forEach(t => t.classList.remove('active'));
+      this.classList.add('active');
+      const genre = this.textContent.trim();
+      if(genre !== 'All' && genre !== 'Non-Fiction') showToast(`Showing ${genre} books`, '');
+    });
+  });
+})();
+
+// ── Search: live results on input ─────
+(function() {
+  const inp = document.getElementById('searchInp');
+  if(!inp) return;
+  let searchTimer;
+  inp.addEventListener('input', function() {
+    clearTimeout(searchTimer);
+    if(this.value.length >= 2) {
+      searchTimer = setTimeout(() => go('s-results'), 600);
+    }
+  });
+  inp.addEventListener('keydown', function(e) {
+    if(e.key === 'Enter') go('s-results');
+  });
+})();
+
+// ── Payment: basic validation ──────────
+(function() {
+  const payBtn = document.querySelector('#s-payment .btn-gold');
+  if(!payBtn) return;
+  payBtn.addEventListener('click', function(e) {
+    const inputs = document.querySelectorAll('#s-payment input');
+    let allFilled = true;
+    inputs.forEach(inp => { if(!inp.value.trim()) { allFilled = false; inp.style.borderColor='var(--coral)'; } else { inp.style.borderColor=''; } });
+    if(!allFilled) { e.stopImmediatePropagation(); showToast('⚠️ Please fill all card details', ''); }
+  });
+})();
+
+// ── Profile nav badge (streak) ─────────
+(function() {
+  const profileNavItems = document.querySelectorAll('.nav-item:last-child');
+  profileNavItems.forEach(item => {
+    const badge = document.createElement('div');
+    badge.className = 'nav-badge';
+    item.appendChild(badge);
+  });
+})();
+
+// ── Keyboard shortcut: ESC = back ─────
+document.addEventListener('keydown', e => { if(e.key === 'Escape' && history.length > 1) back(); });
+
+// ── Auto-advance splash (already set but reinforce) ──
+// Already set in original JS
+
+console.log('✅ PageTurn prototype loaded — all improvements active');
 </script>
 </body>
 </html>
