@@ -1542,7 +1542,7 @@ function startReadingTimer() {
     if(el) el.textContent = `⏱ ${m}:${s.toString().padStart(2,'0')}`;
     // Milestone toasts
     if(readingSeconds === 60) showToast('🔥 1 minute read — streak extended!', 'gold');
-    if(readingSeconds === 300) showToast('⭐ 5 minutes! You're on a roll', 'gold');
+    if(readingSeconds === 300) showToast("⭐ 5 minutes! You're on a roll", 'gold');
   }, 1000);
 }
 function stopReadingTimer() {
