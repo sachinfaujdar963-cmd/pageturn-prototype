@@ -12,7 +12,7 @@
 body{background:#07071A;display:flex;justify-content:center;align-items:center;min-height:100vh;font-family:'Inter',sans-serif;overflow:hidden}
 
 /* ─── PHONE FRAME ───────────────────────────── */
-.frame{position:relative;width:390px;height:844px;background:#0B0C1E;border-radius:50px;overflow:hidden;box-shadow:0 0 0 10px #1a1a2e,0 0 0 12px #252742,0 40px 80px rgba(0,0,0,.8)}
+.frame{position:relative;width:390px;height:844px;background:#0B0C1E;border-radius:50px;overflow:hidden;box-shadow:0 0 0 10px #1a1a2e,0 0 0 12px #252742,0 40px 80px rgba(0,0,0,.8);transform-origin:center center;flex-shrink:0}
 .status-bar{position:absolute;top:0;left:0;right:0;height:44px;z-index:100;display:flex;justify-content:space-between;align-items:center;padding:14px 24px 0;pointer-events:none}
 .status-time{font-size:15px;font-weight:600;color:#F0ECE3}
 .status-icons{display:flex;gap:6px;align-items:center;color:#F0ECE3;font-size:12px}
@@ -1028,6 +1028,20 @@ document.querySelectorAll('.font-btn-sel').forEach(btn => btn.addEventListener('
 
 // Auto-advance splash
 setTimeout(()=> go('s-welcome'), 2200);
+
+// Auto-scale frame to fit any screen
+function scaleFrame() {
+  const frame = document.getElementById('frame');
+  const padding = 48;
+  const scaleH = (window.innerHeight - padding) / 844;
+  const scaleW = (window.innerWidth - padding) / 390;
+  const scale = Math.min(1, scaleH, scaleW);
+  frame.style.transform = 'scale(' + scale + ')';
+  // Adjust body height so frame doesn't overflow
+  document.body.style.height = Math.round(844 * scale + padding) + 'px';
+}
+scaleFrame();
+window.addEventListener('resize', scaleFrame);
 </script>
 </body>
 </html>
