@@ -469,6 +469,101 @@ body{background:#07071A;display:flex;justify-content:center;align-items:center;m
 .reader-sepia{background:#E8D9B5!important}
 .reader-sepia .reader-text{color:#3D2B1A!important}
 
+
+/* ── BOTTOM NAV FIX: flex column layout ── */
+.screen{display:flex!important;flex-direction:column!important;overflow:hidden!important}
+.scroll-area{flex:1;overflow-y:auto;overflow-x:hidden;scrollbar-width:none}
+.scroll-area::-webkit-scrollbar{display:none}
+.bottom-nav{position:relative!important;bottom:auto!important;left:auto!important;
+  right:auto!important;flex-shrink:0;z-index:50}
+
+/* ── CONTINUE READING SECTION ── */
+.continue-card{display:flex;gap:12px;padding:14px;background:var(--surface);
+  border-radius:16px;border:1px solid var(--border);cursor:pointer;transition:all .2s;
+  flex-shrink:0;width:260px}
+.continue-card:active{transform:scale(.97)}
+.continue-cover{width:52px;height:76px;border-radius:8px;overflow:hidden;flex-shrink:0}
+.continue-cover-inner{width:100%;height:100%;display:flex;align-items:flex-end;
+  padding:5px;position:relative}
+.continue-cover-inner::before{content:'';position:absolute;inset:0;
+  background:linear-gradient(transparent 40%,rgba(0,0,0,.7))}
+.continue-title-sm{font-size:7px;font-weight:700;color:#fff;position:relative;z-index:1;line-height:1.2}
+.continue-info{flex:1;min-width:0;display:flex;flex-direction:column;justify-content:space-between}
+.continue-book-title{font-size:13px;font-weight:600;color:var(--text);line-height:1.3;margin-bottom:2px}
+.continue-author-sm{font-size:11px;color:var(--text2);margin-bottom:8px}
+.continue-prog-track{height:3px;background:var(--border);border-radius:2px;margin-bottom:4px}
+.continue-prog-fill{height:100%;border-radius:2px;background:var(--coral)}
+.continue-prog-row{display:flex;justify-content:space-between;align-items:center}
+.continue-pct{font-size:11px;font-weight:600;color:var(--coral)}
+.continue-resume{font-size:11px;color:var(--text2)}
+
+/* ── AUTHOR PAGE ── */
+#s-author{background:var(--bg);padding-bottom:80px}
+.author-hero{padding:56px 24px 24px;display:flex;flex-direction:column;align-items:center;gap:12px}
+.author-avatar{width:88px;height:88px;border-radius:50%;display:flex;align-items:center;
+  justify-content:center;font-size:36px;font-weight:700;color:#fff;
+  background:linear-gradient(135deg,#1a3a6b,#2980B9);border:3px solid var(--border)}
+.author-name{font-family:'Playfair Display',serif;font-size:26px;color:var(--text)}
+.author-bio{font-size:13px;color:var(--text2);text-align:center;line-height:1.7;padding:0 8px}
+.author-stats{display:flex;gap:0;background:var(--surface);border-radius:14px;
+  border:1px solid var(--border);overflow:hidden;width:100%}
+.author-stat{flex:1;padding:14px;text-align:center}
+.author-stat-val{font-family:'Playfair Display',serif;font-size:20px;font-weight:700;
+  color:var(--text);margin-bottom:3px}
+.author-stat-lbl{font-size:10px;color:var(--text2);text-transform:uppercase;letter-spacing:.5px}
+.follow-btn{width:100%;padding:13px;background:transparent;color:var(--coral);
+  font-size:14px;font-weight:600;border:1.5px solid var(--coral);border-radius:14px;
+  cursor:pointer;transition:all .2s}
+.follow-btn.following{background:rgba(232,105,74,.12)}
+
+/* ── READING TIMER ── */
+.reading-timer{position:absolute;top:52px;left:50%;transform:translateX(-50%);
+  background:rgba(0,0,0,.5);backdrop-filter:blur(8px);border-radius:20px;
+  padding:5px 14px;font-size:12px;color:var(--gold);font-weight:600;z-index:20;
+  border:1px solid rgba(212,168,67,.2);pointer-events:none}
+
+/* ── HIGHLIGHT IN READER ── */
+.highlighted{background:rgba(212,168,67,.25);border-radius:3px;cursor:pointer}
+.highlight-toolbar{position:absolute;background:var(--surface2);border:1px solid var(--border);
+  border-radius:12px;padding:8px 12px;display:flex;gap:8px;z-index:100;
+  box-shadow:0 8px 24px rgba(0,0,0,.5);pointer-events:all}
+.highlight-toolbar button{background:none;border:none;font-size:16px;cursor:pointer;padding:4px 6px;border-radius:8px}
+.highlight-toolbar button:hover{background:rgba(255,255,255,.1)}
+
+/* ── READING CHALLENGE BANNER ── */
+.challenge-banner{margin:0 20px 20px;padding:14px 16px;
+  background:linear-gradient(135deg,rgba(212,168,67,.12),rgba(232,105,74,.08));
+  border-radius:16px;border:1px solid rgba(212,168,67,.2);
+  display:flex;align-items:center;gap:12px;cursor:pointer}
+.challenge-icon{font-size:28px;flex-shrink:0}
+.challenge-info{flex:1}
+.challenge-title{font-size:13px;font-weight:600;color:var(--gold);margin-bottom:2px}
+.challenge-sub{font-size:11px;color:var(--text2)}
+.challenge-ring{width:44px;height:44px;flex-shrink:0;position:relative}
+.challenge-ring svg{transform:rotate(-90deg)}
+.challenge-ring-pct{position:absolute;inset:0;display:flex;align-items:center;
+  justify-content:center;font-size:11px;font-weight:700;color:var(--gold)}
+
+/* ── NOTIFICATION BADGE ── */
+.notif-dot{width:8px;height:8px;background:var(--coral);border-radius:50%;
+  border:1.5px solid var(--surface);position:absolute;top:0;right:8px}
+
+/* ── SOCIAL PROOF PILL ── */
+.social-proof-pill{display:inline-flex;align-items:center;gap:6px;
+  background:rgba(76,175,130,.1);border:1px solid rgba(76,175,130,.25);
+  border-radius:20px;padding:5px 12px;font-size:12px;color:var(--success);
+  font-weight:500;margin-left:4px}
+
+/* ── SMOOTH SCROLL HINT ── */
+.scroll-hint{display:flex;gap:4px;justify-content:center;padding:8px 0}
+.scroll-dot{width:5px;height:5px;border-radius:50%;background:var(--border)}
+.scroll-dot.active{background:var(--coral);width:14px;border-radius:3px;
+  transition:width .3s ease}
+
+/* ── COMPLETED BADGE ── */
+.completed-badge{background:rgba(76,175,130,.15);border:1px solid rgba(76,175,130,.3);
+  border-radius:20px;padding:4px 10px;font-size:11px;color:var(--success);font-weight:600}
+
 </style>
 </head>
 
@@ -655,6 +750,66 @@ body{background:#07071A;display:flex;justify-content:center;align-items:center;m
       <span class="search-icon">🔍</span>
       <span>Search books, authors, genres…</span>
     </div>
+
+    <!-- Challenge Banner -->
+    <div class="challenge-banner" onclick="showToast('📚 Reading Challenge: 23 of 30 books this year!','gold')">
+      <div class="challenge-icon">🎯</div>
+      <div class="challenge-info">
+        <div class="challenge-title">2025 Reading Challenge</div>
+        <div class="challenge-sub">23 of 30 books · On track!</div>
+      </div>
+      <div class="challenge-ring">
+        <svg width="44" height="44" viewBox="0 0 44 44">
+          <circle cx="22" cy="22" r="18" fill="none" stroke="rgba(212,168,67,.2)" stroke-width="4"/>
+          <circle cx="22" cy="22" r="18" fill="none" stroke="#D4A843" stroke-width="4"
+            stroke-dasharray="113" stroke-dashoffset="28" stroke-linecap="round"/>
+        </svg>
+        <div class="challenge-ring-pct">77%</div>
+      </div>
+    </div>
+    <!-- Continue Reading -->
+    <div class="section-header"><div class="section-title">Continue Reading 📖</div></div>
+    <div class="books-row" style="gap:12px;padding-bottom:8px">
+      <div class="continue-card" onclick="go('s-reader')">
+        <div class="continue-cover"><div class="continue-cover-inner c1"><span class="continue-title-sm">Midnight Library</span></div></div>
+        <div class="continue-info">
+          <div>
+            <div class="continue-book-title">The Midnight Library</div>
+            <div class="continue-author-sm">Matt Haig</div>
+          </div>
+          <div>
+            <div class="continue-prog-track"><div class="continue-prog-fill" style="width:23%"></div></div>
+            <div class="continue-prog-row"><span class="continue-pct">23%</span><span class="continue-resume">Resume →</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="continue-card" onclick="go('s-reader')">
+        <div class="continue-cover"><div class="continue-cover-inner c2"><span class="continue-title-sm">Atomic Habits</span></div></div>
+        <div class="continue-info">
+          <div>
+            <div class="continue-book-title">Atomic Habits</div>
+            <div class="continue-author-sm">James Clear</div>
+          </div>
+          <div>
+            <div class="continue-prog-track"><div class="continue-prog-fill" style="width:68%"></div></div>
+            <div class="continue-prog-row"><span class="continue-pct">68%</span><span class="continue-resume">Resume →</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="continue-card" onclick="go('s-reader')">
+        <div class="continue-cover"><div class="continue-cover-inner c5"><span class="continue-title-sm">Sapiens</span></div></div>
+        <div class="continue-info">
+          <div>
+            <div class="continue-book-title">Sapiens</div>
+            <div class="continue-author-sm">Yuval Harari</div>
+          </div>
+          <div>
+            <div class="continue-prog-track"><div class="continue-prog-fill" style="width:5%"></div></div>
+            <div class="continue-prog-row"><span class="continue-pct">5%</span><span class="continue-resume">Resume →</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
     <!-- Featured -->
     <div style="padding:0 20px 16px">
       <div class="featured-banner" onclick="go('s-bookdetail',1)">
@@ -743,7 +898,7 @@ body{background:#07071A;display:flex;justify-content:center;align-items:center;m
       <button class="detail-wish" id="wishBtn" onclick="toggleWish()">🤍</button>
       <div class="detail-meta" style="position:absolute;bottom:24px;left:24px;z-index:2">
         <div class="detail-title" id="detail-title">The Midnight Library</div>
-        <div class="detail-author" id="detail-author">Matt Haig · Fiction · 2020</div>
+        <div class="detail-author" id="detail-author" onclick="go('s-author')" style="cursor:pointer">Matt Haig · <span style="color:var(--gold)">View Author →</span></div>
       </div>
     </div>
     <div class="detail-info">
@@ -762,6 +917,12 @@ body{background:#07071A;display:flex;justify-content:center;align-items:center;m
     </div>
     <div class="detail-desc-title">About this book</div>
     <div class="detail-desc" id="detail-desc">Somewhere out beyond the edge of the universe there is a library that contains an infinite number of books, each one the story of another reality. One tells the story of your life as it is, along with another book for the other life you could have lived if you had made a different choice at any point in your life. While we all wonder how our lives might have been, what if you had the chance to go to the library and see for yourself?</div>
+        <div class="detail-desc-title" style="margin-top:0">Readers also enjoyed</div>
+    <div class="books-row" style="padding:0 24px 120px;gap:12px">
+      <div class="book-card" style="width:100px" onclick="go('s-bookdetail',4)"><div class="book-cover" style="width:100px;height:148px"><div class="book-cover-inner c4"><span class="cover-title">The Alchemist</span><span class="cover-author">Coelho</span></div></div><div class="book-info-title" style="font-size:11px">The Alchemist</div><div class="book-rating" style="font-size:10px">⭐ 4.7</div></div>
+      <div class="book-card" style="width:100px" onclick="go('s-bookdetail',5)"><div class="book-cover" style="width:100px;height:148px"><div class="book-cover-inner c5"><span class="cover-title">Sapiens</span><span class="cover-author">Harari</span></div></div><div class="book-info-title" style="font-size:11px">Sapiens</div><div class="book-rating" style="font-size:10px">⭐ 4.8</div></div>
+      <div class="book-card" style="width:100px" onclick="go('s-bookdetail',8)"><div class="book-cover" style="width:100px;height:148px"><div class="book-cover-inner c8"><span class="cover-title">Psych of Money</span><span class="cover-author">Housel</span></div></div><div class="book-info-title" style="font-size:11px">Psychology of Money</div><div class="book-rating" style="font-size:10px">⭐ 4.8</div></div>
+    </div>
     <div class="detail-actions">
       <button class="btn-outline" onclick="handleDownload(event)">⬇ Download</button>
       <button class="btn-read" onclick="go('s-reader')">📖 Read Now</button>
@@ -770,6 +931,7 @@ body{background:#07071A;display:flex;justify-content:center;align-items:center;m
 
   <!-- ══════ S11: READER ══════ -->
   <div class="screen" id="s-reader" style="background:var(--reading-bg)">
+    <div id="reading-timer" class="reading-timer">⏱ 0:00</div>
     <div class="reader-topbar">
       <button class="reader-back" onclick="back()">←</button>
       <div class="reader-chap">Chapter 1 · The Library</div>
@@ -972,6 +1134,40 @@ body{background:#07071A;display:flex;justify-content:center;align-items:center;m
       <div style="height:8px"></div>
       <button class="btn-primary" onclick="go('s-profile')">Save Changes ✓</button>
       <button class="btn-secondary" onclick="back()">Cancel</button>
+    </div>
+  </div>
+
+
+  <!-- ══════ AUTHOR PAGE ══════ -->
+  <div class="screen" id="s-author">
+    <div class="scroll-area">
+      <div class="author-hero">
+        <button style="align-self:flex-start;background:none;border:none;color:var(--text);font-size:22px;cursor:pointer;margin-bottom:8px" onclick="back()">←</button>
+        <div class="author-avatar">MH</div>
+        <div class="author-name">Matt Haig</div>
+        <div style="display:flex;align-items:center;gap:8px"><span class="tag tag-gold">Fiction Author</span><span class="completed-badge">✓ Verified</span></div>
+        <div class="author-bio">Matt Haig is a British author of fiction and non-fiction. His novels include The Radleys, The Humans, and How to Stop Time. His memoir Reasons to Stay Alive was a Sunday Times Number One bestseller for 46 weeks.</div>
+      </div>
+      <div style="padding:0 24px 16px">
+        <div class="author-stats">
+          <div class="author-stat"><div class="author-stat-val">18</div><div class="author-stat-lbl">Books</div></div>
+          <div style="width:1px;background:var(--border)"></div>
+          <div class="author-stat"><div class="author-stat-val">4.8</div><div class="author-stat-lbl">Avg Rating</div></div>
+          <div style="width:1px;background:var(--border)"></div>
+          <div class="author-stat"><div class="author-stat-val">8.2M</div><div class="author-stat-lbl">Readers</div></div>
+        </div>
+      </div>
+      <div style="padding:0 24px 16px">
+        <button class="follow-btn" id="followAuthorBtn" onclick="toggleFollow()">+ Follow Author</button>
+      </div>
+      <div class="section-header"><div class="section-title">Books by Matt Haig</div></div>
+      <div class="books-row" style="padding-bottom:16px">
+        <div class="book-card" onclick="go('s-bookdetail',1)"><div class="book-cover"><div class="book-cover-inner c1"><span class="cover-title">The Midnight Library</span></div></div><div class="book-info-title">The Midnight Library</div><div class="book-rating">⭐ 4.8</div></div>
+        <div class="book-card" onclick="go('s-bookdetail',1)"><div class="book-cover"><div class="book-cover-inner" style="background:linear-gradient(160deg,#1a3a2a,#2d6b4a)"><span class="cover-title">The Humans</span></div></div><div class="book-info-title">The Humans</div><div class="book-rating">⭐ 4.7</div></div>
+        <div class="book-card" onclick="go('s-bookdetail',1)"><div class="book-cover"><div class="book-cover-inner" style="background:linear-gradient(160deg,#3a1a4a,#6b2d8b)"><span class="cover-title">Reasons to Stay Alive</span></div></div><div class="book-info-title">Reasons to Stay Alive</div><div class="book-rating">⭐ 4.9</div></div>
+        <div class="book-card" onclick="go('s-bookdetail',1)"><div class="book-cover"><div class="book-cover-inner" style="background:linear-gradient(160deg,#1a2a3a,#2d4a6b)"><span class="cover-title">How to Stop Time</span></div></div><div class="book-info-title">How to Stop Time</div><div class="book-rating">⭐ 4.6</div></div>
+      </div>
+      <div style="height:16px"></div>
     </div>
   </div>
 
@@ -1314,6 +1510,175 @@ document.addEventListener('keydown', e => { if(e.key === 'Escape' && history.len
 // Already set in original JS
 
 console.log('✅ PageTurn prototype loaded — all improvements active');
+
+/* ═══════════ STRUCTURAL + FEATURE IMPROVEMENTS ═══════════ */
+
+// ── CORE FIX: Restructure screens with bottom-nav into flex layout ──
+(function fixBottomNav() {
+  document.querySelectorAll('.screen').forEach(screen => {
+    const nav = screen.querySelector('.bottom-nav');
+    if (!nav) return;
+    // Create scrollable wrapper
+    const scrollWrap = document.createElement('div');
+    scrollWrap.className = 'scroll-area';
+    // Move all children except nav into scroll-wrap
+    Array.from(screen.children)
+      .filter(c => c !== nav)
+      .forEach(c => scrollWrap.appendChild(c));
+    screen.appendChild(scrollWrap);
+    screen.appendChild(nav);
+  });
+})();
+
+// ── Reading Timer ──
+let readingSeconds = 0, readingInterval = null;
+function startReadingTimer() {
+  if(readingInterval) return;
+  readingInterval = setInterval(() => {
+    readingSeconds++;
+    const m = Math.floor(readingSeconds / 60);
+    const s = readingSeconds % 60;
+    const el = document.getElementById('reading-timer');
+    if(el) el.textContent = `⏱ ${m}:${s.toString().padStart(2,'0')}`;
+    // Milestone toasts
+    if(readingSeconds === 60) showToast('🔥 1 minute read — streak extended!', 'gold');
+    if(readingSeconds === 300) showToast('⭐ 5 minutes! You're on a roll', 'gold');
+  }, 1000);
+}
+function stopReadingTimer() {
+  clearInterval(readingInterval);
+  readingInterval = null;
+}
+
+// ── Text highlight in reader ──
+let highlightToolbar = null;
+document.querySelectorAll('.reader-text p').forEach(p => {
+  p.addEventListener('mouseup', handleTextSelect);
+  p.addEventListener('touchend', handleTextSelect);
+});
+function handleTextSelect(e) {
+  const sel = window.getSelection();
+  if (!sel || sel.toString().trim().length < 3) { removeHighlightToolbar(); return; }
+  if (highlightToolbar) highlightToolbar.remove();
+  highlightToolbar = document.createElement('div');
+  highlightToolbar.className = 'highlight-toolbar';
+  highlightToolbar.innerHTML = `
+    <button onclick="applyHighlight()" title="Highlight">🖊</button>
+    <button onclick="addNote()" title="Note">📝</button>
+    <button onclick="shareQuote()" title="Share">↗</button>
+    <button onclick="removeHighlightToolbar()" title="Close">✕</button>`;
+  const range = sel.getRangeAt(0);
+  const rect = range.getBoundingClientRect();
+  const frameRect = document.getElementById('frame').getBoundingClientRect();
+  highlightToolbar.style.cssText = `position:fixed;top:${rect.top - frameRect.top - 50}px;left:${Math.max(8,rect.left - frameRect.left - 20)}px`;
+  document.getElementById('s-reader').appendChild(highlightToolbar);
+}
+function applyHighlight() {
+  const sel = window.getSelection();
+  if(!sel || !sel.rangeCount) return;
+  const range = sel.getRangeAt(0);
+  const mark = document.createElement('mark');
+  mark.className = 'highlighted';
+  mark.onclick = () => showToast('📌 Bookmark saved','gold');
+  try { range.surroundContents(mark); } catch(e) {}
+  sel.removeAllRanges();
+  removeHighlightToolbar();
+  showToast('✏️ Highlighted & saved','gold');
+}
+function addNote() { removeHighlightToolbar(); showToast('📝 Note added',''); }
+function shareQuote() { removeHighlightToolbar(); showToast('↗ Quote copied to clipboard','success'); }
+function removeHighlightToolbar() { if(highlightToolbar) { highlightToolbar.remove(); highlightToolbar=null; } }
+
+// ── Author follow toggle ──
+let isFollowing = false;
+function toggleFollow() {
+  isFollowing = !isFollowing;
+  const btn = document.getElementById('followAuthorBtn');
+  if(!btn) return;
+  btn.textContent = isFollowing ? '✓ Following' : '+ Follow Author';
+  btn.className = isFollowing ? 'follow-btn following' : 'follow-btn';
+  showToast(isFollowing ? '✓ Following Matt Haig' : 'Unfollowed Matt Haig', isFollowing ? 'success' : '');
+}
+
+// ── Patch go() to start/stop reading timer ──
+const _origGo = go;
+window.go = function(screenId, bookId) {
+  if(screenId === 's-reader') startReadingTimer();
+  else stopReadingTimer();
+  _origGo(screenId, bookId);
+  // Scroll the target screen's scroll-area to top
+  setTimeout(() => {
+    const target = document.getElementById(screenId);
+    if(target) {
+      const sa = target.querySelector('.scroll-area');
+      if(sa) sa.scrollTop = 0;
+    }
+  }, 50);
+};
+
+// ── Update reader progress from scroll-area ──
+setTimeout(() => {
+  const readerScreen = document.getElementById('s-reader');
+  const sa = readerScreen && readerScreen.querySelector('.scroll-area');
+  const oldSa = document.querySelector('#s-reader .scroll-area');
+  const targetEl = oldSa || document.querySelector('.reader-content');
+  if(targetEl) {
+    targetEl.addEventListener('scroll', () => {
+      const pct = Math.min(100, Math.round(
+        (targetEl.scrollTop / Math.max(1, targetEl.scrollHeight - targetEl.clientHeight)) * 77 + 23));
+      const pages = Math.round(288 * pct / 100);
+      const remMin = Math.round((288 - pages) * 0.87);
+      const remH = Math.floor(remMin/60), remM = remMin%60;
+      const pf = document.querySelector('.reader-progress-fill');
+      const pp = document.querySelector('.reader-progress-pct');
+      const pi = document.querySelector('.reader-page-info');
+      if(pf) pf.style.width = pct + '%';
+      if(pp) pp.textContent = pct + '%';
+      if(pi) pi.textContent = `Page ${pages} of 288 · ~${remH}h ${remM}m remaining`;
+      if(pct >= 99 && !window._bookCompleted) {
+        window._bookCompleted = true;
+        showToast('🎉 You finished the book! +50 XP earned','gold',4000);
+      }
+    });
+  }
+}, 500);
+
+// ── Home: scroll-indicator dots for book rows ──
+document.querySelectorAll('.books-row').forEach(row => {
+  row.addEventListener('scroll', function() {
+    const maxScroll = this.scrollWidth - this.clientWidth;
+    const pct = maxScroll > 0 ? this.scrollLeft / maxScroll : 0;
+  });
+});
+
+// ── Pull-to-refresh on home ──
+(function() {
+  let ptStart = 0, ptRefreshing = false;
+  const home = document.getElementById('s-home');
+  home.addEventListener('touchstart', e => { ptStart = e.touches[0].clientY; }, {passive:true});
+  home.addEventListener('touchend', e => {
+    const dy = e.changedTouches[0].clientY - ptStart;
+    const sa = home.querySelector('.scroll-area');
+    if(dy > 80 && sa && sa.scrollTop <= 0 && !ptRefreshing) {
+      ptRefreshing = true;
+      showToast('🔄 Refreshed — 3 new books added!','');
+      setTimeout(() => { ptRefreshing = false; }, 2000);
+    }
+  }, {passive:true});
+})();
+
+// ── Streak milestone notification on home load ──
+setTimeout(() => {
+  const curr = document.querySelector('.screen.active');
+  if(curr && curr.id === 's-home') return;
+}, 100);
+document.getElementById('s-home').addEventListener('transitionend', function handler() {
+  if(!this.classList.contains('active')) return;
+  this.removeEventListener('transitionend', handler);
+  setTimeout(() => showToast('🔥 14-day streak! Keep it up, Sachin 🎉','gold',3500), 800);
+});
+
+console.log('✅ All structural fixes + new features loaded');
 </script>
 </body>
 </html>
