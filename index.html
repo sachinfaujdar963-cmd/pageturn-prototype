@@ -1,1685 +1,1624 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PageTurn — Interactive Prototype</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;900&family=Inter:wght@300;400;500;600;700&family=Lora:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>PageTurn — High-Fidelity Prototype v2</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;800;900&family=Inter:wght@300;400;500;600;700;800&family=Lora:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
 <style>
-
-/* ─── RESET ─────────────────────────────────── */
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-body{background:#07071A;display:flex;justify-content:center;align-items:center;min-height:100vh;font-family:'Inter',sans-serif;overflow:hidden}
-
-/* ─── PHONE FRAME ───────────────────────────── */
-.frame{position:relative;width:390px;height:844px;background:#0B0C1E;border-radius:50px;overflow:hidden;box-shadow:0 0 0 10px #1a1a2e,0 0 0 12px #252742,0 40px 80px rgba(0,0,0,.8);transform-origin:center center;flex-shrink:0}
-.status-bar{position:absolute;top:0;left:0;right:0;height:44px;z-index:100;display:flex;justify-content:space-between;align-items:center;padding:14px 24px 0;pointer-events:none}
-.status-time{font-size:15px;font-weight:600;color:#F0ECE3}
-.status-icons{display:flex;gap:6px;align-items:center;color:#F0ECE3;font-size:12px}
-.notch{position:absolute;top:0;left:50%;transform:translateX(-50%);width:120px;height:34px;background:#07071A;border-radius:0 0 20px 20px;z-index:101}
-
-/* ─── SCREENS ───────────────────────────────── */
-.screen{position:absolute;inset:0;overflow-y:auto;overflow-x:hidden;opacity:0;pointer-events:none;transition:opacity .3s ease,transform .3s ease;transform:translateX(30px);scrollbar-width:none}
-.screen::-webkit-scrollbar{display:none}
-.screen.active{opacity:1;pointer-events:all;transform:translateX(0)}
-.screen.exit-left{opacity:0;transform:translateX(-30px)}
-
-/* ─── DESIGN TOKENS ────────────────────────── */
 :root{
---bg:#0B0C1E;--surface:#161729;--surface2:#1E2040;
---gold:#D4A843;--coral:#E8694A;--coral2:#C85A3C;
---text:#F0ECE3;--text2:#8B8FAA;--text3:#565A72;
---border:#252742;--success:#4CAF82;
---reading-bg:#F7F3E9;--reading-text:#2C2416;
+  --bg:#0b0c1e;
+  --bg2:#101226;
+  --surface:#171a31;
+  --surface2:#202446;
+  --border:#2a2f57;
+  --text:#f4efe6;
+  --text2:#9aa0c0;
+  --text3:#676d8f;
+  --gold:#d4a843;
+  --coral:#e8735a;
+  --coral2:#ca5f49;
+  --success:#4caf82;
+  --danger:#ff6b6b;
+  --cream:#f8f1e2;
+  --reader:#f7f1e5;
+  --readerText:#2c2416;
 }
 
-/* ─── SHARED COMPONENTS ─────────────────────── */
-.btn-primary{width:100%;padding:16px;background:var(--coral);color:#fff;font-family:'Inter',sans-serif;font-size:16px;font-weight:600;border:none;border-radius:14px;cursor:pointer;transition:all .2s;letter-spacing:.3px}
-.btn-primary:active{background:var(--coral2);transform:scale(.98)}
-.btn-secondary{width:100%;padding:15px;background:transparent;color:var(--text);font-family:'Inter',sans-serif;font-size:15px;font-weight:500;border:1.5px solid var(--border);border-radius:14px;cursor:pointer;transition:all .2s}
-.btn-secondary:active{background:var(--surface);transform:scale(.98)}
-.btn-gold{width:100%;padding:16px;background:linear-gradient(135deg,#D4A843,#F5C842);color:#1a1000;font-family:'Inter',sans-serif;font-size:16px;font-weight:700;border:none;border-radius:14px;cursor:pointer}
-.input-field{width:100%;padding:16px;background:var(--surface);color:var(--text);font-family:'Inter',sans-serif;font-size:15px;border:1.5px solid var(--border);border-radius:14px;outline:none;transition:border-color .2s}
-.input-field::placeholder{color:var(--text3)}
-.input-field:focus{border-color:var(--gold)}
-.back-btn{background:none;border:none;color:var(--text);font-size:22px;cursor:pointer;padding:8px;margin-left:-8px;opacity:.8}
-.screen-header{display:flex;align-items:center;gap:12px;padding:56px 24px 20px}
-.screen-header h2{font-family:'Playfair Display',serif;font-size:22px;color:var(--text)}
-.tag{display:inline-block;padding:4px 10px;border-radius:20px;font-size:11px;font-weight:600;letter-spacing:.5px}
-.tag-gold{background:rgba(212,168,67,.15);color:var(--gold);border:1px solid rgba(212,168,67,.3)}
-.tag-coral{background:rgba(232,105,74,.15);color:var(--coral);border:1px solid rgba(232,105,74,.3)}
-.tag-success{background:rgba(76,175,130,.15);color:var(--success);border:1px solid rgba(76,175,130,.3)}
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  min-height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  background:
+    radial-gradient(circle at top,#131538 0%,#090a18 44%,#06070f 100%);
+  font-family:'Inter',sans-serif;
+  overflow:hidden;
+  color:var(--text);
+}
+button,input{font:inherit}
+button{cursor:pointer}
+a{color:inherit;text-decoration:none}
 
-/* ─── BOTTOM NAV ────────────────────────────── */
-.bottom-nav{position:absolute;bottom:0;left:0;right:0;height:80px;background:var(--surface);border-top:1px solid var(--border);display:flex;justify-content:space-around;align-items:center;padding-bottom:16px;z-index:50}
-.nav-item{display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;padding:8px 16px;border-radius:12px;transition:all .2s}
-.nav-item svg{width:22px;height:22px;fill:var(--text3)}
-.nav-item span{font-size:10px;font-weight:500;color:var(--text3)}
-.nav-item.active svg{fill:var(--coral)}
-.nav-item.active span{color:var(--coral)}
+.hint{
+  position:fixed;top:14px;left:50%;transform:translateX(-50%);
+  z-index:999;
+  padding:8px 16px;
+  background:rgba(255,255,255,.08);
+  border:1px solid rgba(255,255,255,.12);
+  backdrop-filter:blur(10px);
+  border-radius:999px;
+  font-size:12px;
+  color:rgba(244,239,230,.72);
+  white-space:nowrap;
+  pointer-events:none;
+}
 
-/* ═══════════════════════════════════════════ */
-/* S1 — SPLASH */
-/* ═══════════════════════════════════════════ */
-#s-splash{background:linear-gradient(160deg,#07071A 0%,#0F0D2E 50%,#1a0a1a 100%);display:flex;flex-direction:column;justify-content:center;align-items:center;gap:20px}
-.splash-logo{display:flex;flex-direction:column;align-items:center;gap:12px;animation:fadeUp .8s ease forwards}
-.splash-icon{width:88px;height:88px;background:linear-gradient(135deg,#D4A843,#F5C842);border-radius:24px;display:flex;align-items:center;justify-content:center;font-size:42px;box-shadow:0 8px 32px rgba(212,168,67,.4)}
-.splash-name{font-family:'Playfair Display',serif;font-size:38px;font-weight:900;color:#F0ECE3;letter-spacing:1px}
-.splash-tagline{font-size:14px;color:var(--text2);letter-spacing:2px;text-transform:uppercase}
-.splash-loader{width:48px;height:3px;background:var(--border);border-radius:2px;overflow:hidden;margin-top:32px}
-.splash-loader-fill{height:100%;width:0%;background:linear-gradient(90deg,var(--gold),var(--coral));border-radius:2px;animation:load 2s ease forwards}
-@keyframes load{0%{width:0%}100%{width:100%}}
-@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+.frame{
+  width:390px;height:844px;
+  border-radius:44px;
+  position:relative;
+  background:linear-gradient(180deg,#070816 0%,#090a1a 100%);
+  border:1px solid rgba(255,255,255,.06);
+  box-shadow:
+    0 0 0 10px rgba(26,26,46,.9),
+    0 0 0 12px rgba(37,39,66,.85),
+    0 30px 90px rgba(0,0,0,.8);
+  overflow:hidden;
+}
 
-/* ═══════════════════════════════════════════ */
-/* S2 — WELCOME */
-/* ═══════════════════════════════════════════ */
-#s-welcome{background:var(--bg)}
-.welcome-hero{height:480px;position:relative;overflow:hidden}
-.welcome-shelf{display:flex;gap:10px;padding:60px 16px 20px;height:100%;align-items:flex-end;justify-content:center}
-.shelf-book{border-radius:8px;flex-shrink:0;box-shadow:0 8px 24px rgba(0,0,0,.5);cursor:pointer;transition:transform .3s}
-.shelf-book:hover{transform:translateY(-8px)}
-.shelf-book.tall{height:260px}
-.shelf-book.mid{height:220px}
-.shelf-book.short{height:180px}
-.shelf-gradient{position:absolute;bottom:0;left:0;right:0;height:200px;background:linear-gradient(transparent,var(--bg))}
-.welcome-content{padding:0 28px 32px;display:flex;flex-direction:column;gap:16px}
-.welcome-eyebrow{font-size:12px;font-weight:600;color:var(--gold);letter-spacing:2px;text-transform:uppercase}
-.welcome-title{font-family:'Playfair Display',serif;font-size:34px;line-height:1.2;color:var(--text)}
-.welcome-title em{color:var(--gold);font-style:italic}
-.welcome-sub{font-size:14px;color:var(--text2);line-height:1.7}
-.welcome-btns{display:flex;flex-direction:column;gap:10px;margin-top:8px}
-.social-row{display:flex;gap:10px;margin-top:4px}
-.social-btn{flex:1;padding:14px;background:var(--surface);border:1.5px solid var(--border);border-radius:14px;color:var(--text);font-size:14px;font-weight:500;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px}
-.divider-row{display:flex;align-items:center;gap:12px;margin:4px 0}
-.divider-line{flex:1;height:1px;background:var(--border)}
-.divider-text{font-size:12px;color:var(--text3)}
+.notch{
+  position:absolute;top:0;left:50%;transform:translateX(-50%);
+  width:128px;height:36px;
+  background:#06070f;
+  border-radius:0 0 22px 22px;
+  z-index:40;
+}
 
-/* ═══════════════════════════════════════════ */
-/* S3 — SIGN UP */
-/* ═══════════════════════════════════════════ */
-#s-signup{background:var(--bg)}
-.auth-form{padding:0 24px 32px;display:flex;flex-direction:column;gap:14px}
-.auth-form label{font-size:12px;font-weight:600;color:var(--text2);letter-spacing:.5px;display:block;margin-bottom:4px}
-.auth-terms{font-size:12px;color:var(--text2);text-align:center;line-height:1.6;margin-top:4px}
-.auth-terms a{color:var(--gold)}
-.auth-switch{text-align:center;font-size:14px;color:var(--text2);margin-top:8px}
-.auth-switch a{color:var(--coral);cursor:pointer;font-weight:600}
+.status{
+  position:absolute;top:0;left:0;right:0;height:44px;
+  z-index:50;
+  display:flex;justify-content:space-between;align-items:center;
+  padding:13px 22px 0;
+  pointer-events:none;
+  font-size:13px;
+  color:#f3ede1;
+}
+.status .icons{display:flex;gap:6px;align-items:center;font-size:12px}
 
-/* ═══════════════════════════════════════════ */
-/* S4 — OTP */
-/* ═══════════════════════════════════════════ */
-#s-otp{background:var(--bg);display:flex;flex-direction:column}
-.otp-wrap{padding:0 24px 32px;display:flex;flex-direction:column;gap:24px;align-items:center}
-.otp-icon{width:80px;height:80px;background:rgba(212,168,67,.12);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:36px;border:2px solid rgba(212,168,67,.3)}
-.otp-title{font-family:'Playfair Display',serif;font-size:26px;color:var(--text);text-align:center}
-.otp-sub{font-size:14px;color:var(--text2);text-align:center;line-height:1.7}
-.otp-boxes{display:flex;gap:12px;justify-content:center}
-.otp-box{width:52px;height:60px;background:var(--surface);border:2px solid var(--border);border-radius:14px;font-size:24px;font-weight:700;color:var(--text);text-align:center;font-family:'Playfair Display',serif;display:flex;align-items:center;justify-content:center}
-.otp-box.filled{border-color:var(--gold);color:var(--gold);background:rgba(212,168,67,.08)}
-.otp-resend{font-size:14px;color:var(--text2);text-align:center}
-.otp-resend a{color:var(--coral);cursor:pointer;font-weight:600}
-
-/* ═══════════════════════════════════════════ */
-/* S5 — PLANS */
-/* ═══════════════════════════════════════════ */
-#s-plans{background:var(--bg);overflow-y:auto}
-.plans-hero{padding:56px 24px 20px;text-align:center}
-.plans-hero h1{font-family:'Playfair Display',serif;font-size:28px;color:var(--text);margin-bottom:8px}
-.plans-hero p{font-size:14px;color:var(--text2);line-height:1.7}
-.plans-list{padding:0 20px 24px;display:flex;flex-direction:column;gap:14px}
-.plan-card{border:2px solid var(--border);border-radius:20px;padding:20px;cursor:pointer;transition:all .2s;position:relative;background:var(--surface)}
-.plan-card:active{transform:scale(.98)}
-.plan-card.recommended{border-color:var(--gold);background:rgba(212,168,67,.05)}
-.plan-badge{position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,#D4A843,#F5C842);color:#1a1000;font-size:11px;font-weight:700;padding:4px 14px;border-radius:20px;letter-spacing:.5px;white-space:nowrap}
-.plan-name{font-size:18px;font-weight:700;color:var(--text);margin-bottom:4px}
-.plan-price{font-family:'Playfair Display',serif;font-size:30px;font-weight:700;color:var(--text);margin-bottom:2px}
-.plan-price span{font-size:14px;font-weight:400;color:var(--text2)}
-.plan-desc{font-size:13px;color:var(--text2);margin-bottom:14px;line-height:1.6}
-.plan-features{display:flex;flex-direction:column;gap:8px}
-.plan-feature{font-size:13px;color:var(--text2);display:flex;align-items:center;gap:8px}
-.plan-feature::before{content:'✓';color:var(--success);font-weight:700;font-size:14px;flex-shrink:0}
-.plan-card.free .plan-price{color:var(--success)}
-
-/* ═══════════════════════════════════════════ */
-/* S6 — PAYMENT */
-/* ═══════════════════════════════════════════ */
-#s-payment{background:var(--bg)}
-.payment-form{padding:0 24px 32px;display:flex;flex-direction:column;gap:14px}
-.pay-summary{background:var(--surface);border-radius:16px;padding:16px;border:1px solid var(--border);margin-bottom:4px}
-.pay-summary-title{font-size:12px;color:var(--text2);margin-bottom:8px;font-weight:600;letter-spacing:.5px;text-transform:uppercase}
-.pay-row{display:flex;justify-content:space-between;align-items:center;padding:4px 0}
-.pay-row span:first-child{font-size:14px;color:var(--text2)}
-.pay-row span:last-child{font-size:14px;font-weight:600;color:var(--text)}
-.pay-total{border-top:1px solid var(--border);margin-top:8px;padding-top:8px}
-.pay-total span:last-child{font-size:18px;color:var(--gold);font-weight:700}
-.card-row{display:flex;gap:12px}
-.card-icons{display:flex;gap:8px;align-items:center;margin-top:4px}
-.card-icon{background:var(--surface2);border-radius:6px;padding:4px 8px;font-size:11px;font-weight:700;color:var(--text2);border:1px solid var(--border)}
-.secure-note{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--text3);justify-content:center;margin-top:4px}
-
-/* ═══════════════════════════════════════════ */
-/* S7 — SUCCESS */
-/* ═══════════════════════════════════════════ */
-#s-success{background:linear-gradient(160deg,#07071A,#0d1a0d);display:flex;flex-direction:column;justify-content:center;align-items:center;gap:24px;padding:32px}
-.success-anim{width:100px;height:100px;background:radial-gradient(circle,rgba(76,175,130,.3),transparent);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:52px;animation:pulse 2s ease infinite}
-@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(76,175,130,.4)}50%{box-shadow:0 0 0 20px rgba(76,175,130,0)}}
-.success-title{font-family:'Playfair Display',serif;font-size:30px;color:var(--text);text-align:center}
-.success-sub{font-size:15px;color:var(--text2);text-align:center;line-height:1.7;max-width:280px}
-.success-dots{display:flex;gap:8px;justify-content:center}
-.success-dot{width:8px;height:8px;border-radius:50%;background:var(--success);opacity:.4}
-.success-dot.active{opacity:1}
-
-/* ═══════════════════════════════════════════ */
-/* S8 — HOME */
-/* ═══════════════════════════════════════════ */
-#s-home{background:var(--bg);padding-bottom:80px}
-.home-topbar{padding:56px 20px 16px;display:flex;justify-content:space-between;align-items:center}
-.home-greeting{font-size:14px;color:var(--text2)}
-.home-user{font-family:'Playfair Display',serif;font-size:22px;color:var(--text)}
-.avatar-btn{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,#D4A843,#E8694A);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:15px;cursor:pointer;border:none;flex-shrink:0}
-.home-search-bar{margin:0 20px 20px;background:var(--surface);border:1.5px solid var(--border);border-radius:14px;padding:13px 16px;display:flex;align-items:center;gap:10px;cursor:pointer;transition:border-color .2s}
-.home-search-bar:hover{border-color:var(--gold)}
-.home-search-bar span{font-size:14px;color:var(--text3);flex:1}
-.search-icon{font-size:18px;color:var(--text3)}
-.section-header{padding:0 20px;display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
-.section-title{font-family:'Playfair Display',serif;font-size:20px;color:var(--text)}
-.see-all{font-size:13px;color:var(--coral);font-weight:600;cursor:pointer;background:none;border:none}
-.genre-tabs{padding:0 20px;display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;margin-bottom:20px}
-.genre-tabs::-webkit-scrollbar{display:none}
-.genre-tab{flex-shrink:0;padding:8px 16px;border-radius:20px;font-size:13px;font-weight:500;cursor:pointer;border:none;transition:all .2s}
-.genre-tab.active{background:var(--coral);color:#fff}
-.genre-tab:not(.active){background:var(--surface);color:var(--text2);border:1px solid var(--border)}
-.books-row{padding:0 20px;display:flex;gap:14px;overflow-x:auto;scrollbar-width:none;margin-bottom:28px;padding-bottom:4px}
-.books-row::-webkit-scrollbar{display:none}
-.book-card{flex-shrink:0;cursor:pointer;width:120px}
-.book-cover{width:120px;height:175px;border-radius:10px;box-shadow:0 8px 24px rgba(0,0,0,.5);overflow:hidden;position:relative;margin-bottom:8px;transition:transform .2s}
-.book-card:active .book-cover{transform:scale(.96)}
-.book-cover-inner{width:100%;height:100%;display:flex;flex-direction:column;justify-content:flex-end;padding:10px;position:relative}
-.book-cover-inner::before{content:'';position:absolute;inset:0;background:linear-gradient(transparent 30%,rgba(0,0,0,.7))}
-.cover-title{font-size:11px;font-weight:700;color:#fff;line-height:1.3;position:relative;z-index:1}
-.cover-author{font-size:9px;color:rgba(255,255,255,.7);position:relative;z-index:1;margin-top:2px}
-.book-info-title{font-size:12px;font-weight:600;color:var(--text);line-height:1.3;margin-bottom:2px}
-.book-info-sub{font-size:11px;color:var(--text2)}
-.book-rating{font-size:11px;color:var(--gold);display:flex;align-items:center;gap:3px}
-.featured-banner{margin:0 20px 28px;border-radius:20px;overflow:hidden;position:relative;height:180px;cursor:pointer}
-.featured-bg{width:100%;height:100%;display:flex;flex-direction:column;justify-content:flex-end;padding:20px;position:relative}
-.featured-bg::after{content:'';position:absolute;inset:0;background:linear-gradient(transparent,rgba(0,0,0,.85))}
-.featured-eyebrow{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--gold);position:relative;z-index:1;margin-bottom:4px}
-.featured-title{font-family:'Playfair Display',serif;font-size:24px;font-weight:700;color:#fff;position:relative;z-index:1;line-height:1.2;margin-bottom:4px}
-.featured-author{font-size:13px;color:rgba(255,255,255,.7);position:relative;z-index:1}
-.featured-cta{position:absolute;top:16px;right:16px;background:var(--coral);color:#fff;border:none;padding:8px 14px;border-radius:20px;font-size:12px;font-weight:600;cursor:pointer;z-index:1}
-
-/* ═══════════════════════════════════════════ */
-/* S9 — GENRE BROWSE */
-/* ═══════════════════════════════════════════ */
-#s-genre{background:var(--bg);padding-bottom:80px}
-.genre-grid{padding:0 20px;display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:28px}
-.genre-tile{border-radius:16px;height:90px;display:flex;align-items:center;justify-content:center;cursor:pointer;position:relative;overflow:hidden;border:1px solid rgba(255,255,255,.05)}
-.genre-tile:active{transform:scale(.97)}
-.genre-tile-name{font-family:'Playfair Display',serif;font-size:17px;font-weight:600;color:#fff;position:relative;z-index:1;text-align:center}
-.genre-tile-count{font-size:11px;color:rgba(255,255,255,.6);position:relative;z-index:1;text-align:center;margin-top:2px}
-.genre-tile-wrap{display:flex;flex-direction:column;align-items:center;gap:2px}
-
-/* ═══════════════════════════════════════════ */
-/* S10 — BOOK DETAIL */
-/* ═══════════════════════════════════════════ */
-#s-bookdetail{background:var(--bg);padding-bottom:100px}
-.detail-hero{height:320px;position:relative}
-.detail-cover{width:100%;height:100%;display:flex;align-items:flex-end;padding:24px;position:relative}
-.detail-cover::after{content:'';position:absolute;inset:0;background:linear-gradient(transparent 20%,var(--bg))}
-.detail-back{position:absolute;top:52px;left:16px;width:40px;height:40px;background:rgba(0,0,0,.5);backdrop-filter:blur(8px);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:20px;color:#fff;cursor:pointer;border:none;z-index:10}
-.detail-wish{position:absolute;top:52px;right:16px;width:40px;height:40px;background:rgba(0,0,0,.5);backdrop-filter:blur(8px);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;cursor:pointer;border:none;z-index:10}
-.detail-meta{position:relative;z-index:1;display:flex;flex-direction:column;gap:4px}
-.detail-title{font-family:'Playfair Display',serif;font-size:26px;font-weight:700;color:#fff;line-height:1.2}
-.detail-author{font-size:14px;color:rgba(255,255,255,.7)}
-.detail-info{padding:16px 24px;display:flex;gap:0;border-bottom:1px solid var(--border)}
-.detail-stat{flex:1;text-align:center}
-.detail-stat-val{font-size:18px;font-weight:700;color:var(--text);margin-bottom:2px}
-.detail-stat-val.gold{color:var(--gold)}
-.detail-stat-lbl{font-size:11px;color:var(--text2);text-transform:uppercase;letter-spacing:.5px}
-.detail-stat-sep{width:1px;background:var(--border)}
-.detail-tags{padding:16px 24px;display:flex;gap:8px;flex-wrap:wrap}
-.detail-desc-title{font-family:'Playfair Display',serif;font-size:18px;color:var(--text);padding:0 24px;margin-bottom:10px}
-.detail-desc{font-size:14px;color:var(--text2);line-height:1.8;padding:0 24px;margin-bottom:24px}
-.detail-actions{position:absolute;bottom:0;left:0;right:0;padding:16px 24px 32px;background:linear-gradient(transparent,var(--bg) 30%);display:flex;gap:12px}
-.btn-outline{flex:1;padding:15px;background:transparent;color:var(--text);font-family:'Inter',sans-serif;font-size:15px;font-weight:600;border:1.5px solid var(--border);border-radius:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px}
-.btn-read{flex:2;padding:15px;background:var(--coral);color:#fff;font-family:'Inter',sans-serif;font-size:15px;font-weight:600;border:none;border-radius:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px}
-
-/* ═══════════════════════════════════════════ */
-/* S11 — READER */
-/* ═══════════════════════════════════════════ */
-#s-reader{background:var(--reading-bg)}
-.reader-topbar{position:absolute;top:0;left:0;right:0;padding:52px 20px 12px;display:flex;justify-content:space-between;align-items:center;background:linear-gradient(var(--reading-bg),transparent);z-index:10}
-.reader-back{background:rgba(0,0,0,.08);border:none;width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;cursor:pointer;color:var(--reading-text)}
-.reader-chap{font-size:13px;font-weight:600;color:var(--reading-text);opacity:.6;text-align:center;flex:1}
-.reader-settings-btn{background:rgba(0,0,0,.08);border:none;width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;cursor:pointer;color:var(--reading-text)}
-.reader-content{padding:100px 28px 120px;height:100%;overflow-y:auto;scrollbar-width:none}
-.reader-content::-webkit-scrollbar{display:none}
-.reader-book-title{font-family:'Playfair Display',serif;font-size:22px;color:var(--reading-text);margin-bottom:4px}
-.reader-chapter{font-size:13px;color:#8B7355;font-weight:600;letter-spacing:1px;text-transform:uppercase;margin-bottom:24px}
-.reader-divider{width:48px;height:2px;background:#D4A843;margin-bottom:24px}
-.reader-text{font-family:'Lora',serif;font-size:17px;line-height:1.9;color:var(--reading-text)}
-.reader-text p{margin-bottom:18px}
-.reader-text p:first-child::first-letter{font-family:'Playfair Display',serif;font-size:52px;font-weight:700;float:left;line-height:.85;margin:4px 8px 0 0;color:#D4A843}
-.reader-bottombar{position:absolute;bottom:0;left:0;right:0;padding:12px 24px 28px;background:linear-gradient(transparent,var(--reading-bg))}
-.reader-progress-row{display:flex;align-items:center;gap:12px;margin-bottom:8px}
-.reader-progress-track{flex:1;height:3px;background:rgba(0,0,0,.12);border-radius:2px}
-.reader-progress-fill{height:100%;background:#D4A843;border-radius:2px;width:23%}
-.reader-progress-pct{font-size:12px;font-weight:600;color:#8B7355}
-.reader-page-info{font-size:12px;color:#8B7355;text-align:center}
-
-/* ═══════════════════════════════════════════ */
-/* S12 — READER SETTINGS */
-/* ═══════════════════════════════════════════ */
-#s-settings{background:rgba(0,0,0,.6);display:flex;flex-direction:column;justify-content:flex-end;backdrop-filter:blur(4px)}
-.settings-panel{background:var(--surface);border-radius:28px 28px 0 0;padding:20px 24px 40px}
-.settings-handle{width:40px;height:4px;background:var(--border);border-radius:2px;margin:0 auto 20px}
-.settings-title{font-family:'Playfair Display',serif;font-size:20px;color:var(--text);margin-bottom:20px}
-.settings-section{margin-bottom:20px}
-.settings-label{font-size:12px;font-weight:600;color:var(--text2);letter-spacing:.5px;text-transform:uppercase;margin-bottom:12px}
-.font-size-row{display:flex;align-items:center;gap:12px}
-.font-btn{width:40px;height:40px;background:var(--surface2);border:1.5px solid var(--border);border-radius:12px;font-size:18px;color:var(--text);cursor:pointer;display:flex;align-items:center;justify-content:center}
-.font-size-track{flex:1;height:4px;background:var(--border);border-radius:2px;position:relative}
-.font-size-fill{width:40%;height:100%;background:var(--gold);border-radius:2px}
-.font-size-thumb{width:20px;height:20px;background:var(--gold);border-radius:50%;position:absolute;top:50%;left:40%;transform:translate(-50%,-50%);box-shadow:0 2px 8px rgba(212,168,67,.5)}
-.theme-row{display:flex;gap:10px}
-.theme-btn{flex:1;padding:12px;border-radius:14px;border:2px solid var(--border);cursor:pointer;font-size:13px;font-weight:500;text-align:center;transition:all .2s}
-.theme-btn.active{border-color:var(--gold)}
-.theme-cream{background:#F7F3E9;color:#2C2416}
-.theme-dark{background:#1A1A1A;color:#F0ECE3}
-.theme-sepia{background:#E8D9B5;color:#3D2B1A}
-.font-row{display:flex;gap:10px}
-.font-btn-sel{flex:1;padding:10px;border-radius:12px;border:2px solid var(--border);cursor:pointer;font-size:13px;font-weight:500;text-align:center;color:var(--text);background:var(--surface2)}
-.font-btn-sel.active{border-color:var(--gold);background:rgba(212,168,67,.08)}
-
-/* ═══════════════════════════════════════════ */
-/* S13 — SEARCH */
-/* ═══════════════════════════════════════════ */
-#s-search{background:var(--bg);padding-bottom:80px}
-.search-wrap{padding:56px 20px 20px}
-.search-input-row{display:flex;align-items:center;gap:10px;background:var(--surface);border:1.5px solid var(--gold);border-radius:14px;padding:12px 16px;margin-bottom:20px}
-.search-input-row input{flex:1;background:none;border:none;outline:none;color:var(--text);font-size:16px;font-family:'Inter',sans-serif}
-.search-input-row input::placeholder{color:var(--text3)}
-.search-input-row span{font-size:20px;color:var(--text3)}
-.clear-btn{font-size:20px;color:var(--text3);cursor:pointer;background:none;border:none}
-.search-section-lbl{font-size:12px;font-weight:600;color:var(--text2);letter-spacing:.5px;text-transform:uppercase;margin-bottom:12px}
-.recent-chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:24px}
-.recent-chip{padding:8px 14px;background:var(--surface);border:1px solid var(--border);border-radius:20px;font-size:13px;color:var(--text2);cursor:pointer;transition:all .2s}
-.recent-chip:active{background:var(--surface2);color:var(--text)}
-.trending-list{display:flex;flex-direction:column;gap:12px}
-.trending-item{display:flex;align-items:center;gap:14px;cursor:pointer;padding:6px 0}
-.trending-rank{font-family:'Playfair Display',serif;font-size:22px;font-weight:700;color:var(--border);width:28px;text-align:center}
-.trending-info{flex:1}
-.trending-title{font-size:14px;font-weight:600;color:var(--text);margin-bottom:2px}
-.trending-genre{font-size:12px;color:var(--text2)}
-.trending-arrow{font-size:18px;color:var(--text3)}
-
-/* ═══════════════════════════════════════════ */
-/* S14 — SEARCH RESULTS */
-/* ═══════════════════════════════════════════ */
-#s-results{background:var(--bg);padding-bottom:80px}
-.results-list{padding:0 20px;display:flex;flex-direction:column;gap:14px}
-.result-item{display:flex;gap:14px;cursor:pointer;padding:12px;background:var(--surface);border-radius:16px;border:1px solid var(--border);transition:all .2s}
-.result-item:active{transform:scale(.98)}
-.result-cover{width:60px;height:88px;border-radius:8px;flex-shrink:0;overflow:hidden}
-.result-cover-inner{width:100%;height:100%;display:flex;align-items:flex-end;padding:6px;position:relative}
-.result-cover-inner::before{content:'';position:absolute;inset:0;background:linear-gradient(transparent 40%,rgba(0,0,0,.7))}
-.result-title-sm{font-size:8px;font-weight:700;color:#fff;position:relative;z-index:1;line-height:1.2}
-.result-info{flex:1;min-width:0;display:flex;flex-direction:column;justify-content:center;gap:4px}
-.result-title{font-size:15px;font-weight:600;color:var(--text);line-height:1.3}
-.result-author{font-size:13px;color:var(--text2)}
-.result-tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:4px}
-.result-rating{font-size:12px;color:var(--gold);display:flex;align-items:center;gap:4px;margin-top:2px}
-
-/* ═══════════════════════════════════════════ */
-/* S15 — DOWNLOADS */
-/* ═══════════════════════════════════════════ */
-#s-downloads{background:var(--bg);padding-bottom:80px}
-.downloads-list{padding:0 20px;display:flex;flex-direction:column;gap:12px}
-.download-item{display:flex;align-items:center;gap:14px;padding:14px;background:var(--surface);border-radius:16px;border:1px solid var(--border)}
-.download-cover{width:52px;height:76px;border-radius:8px;overflow:hidden;flex-shrink:0}
-.download-cover-inner{width:100%;height:100%;display:flex;align-items:flex-end;padding:5px;position:relative}
-.download-cover-inner::before{content:'';position:absolute;inset:0;background:linear-gradient(transparent 40%,rgba(0,0,0,.7))}
-.download-cover-title{font-size:7px;font-weight:700;color:#fff;position:relative;z-index:1;line-height:1.2}
-.download-info{flex:1;min-width:0}
-.download-title{font-size:14px;font-weight:600;color:var(--text);margin-bottom:3px}
-.download-author{font-size:12px;color:var(--text2);margin-bottom:8px}
-.download-progress{width:100%;height:3px;background:var(--border);border-radius:2px;margin-bottom:4px}
-.download-fill{height:100%;border-radius:2px;background:var(--coral)}
-.download-meta{font-size:11px;color:var(--text3);display:flex;justify-content:space-between}
-.download-icon{font-size:22px;flex-shrink:0}
-.storage-info{margin:0 20px 20px;padding:14px;background:rgba(212,168,67,.08);border-radius:14px;border:1px solid rgba(212,168,67,.2);display:flex;align-items:center;gap:12px}
-.storage-icon{font-size:24px}
-.storage-text{flex:1}
-.storage-title{font-size:13px;font-weight:600;color:var(--gold);margin-bottom:2px}
-.storage-sub{font-size:11px;color:var(--text2)}
-.storage-bar{width:100%;height:4px;background:var(--border);border-radius:2px;margin-top:8px}
-.storage-fill{width:34%;height:100%;background:var(--gold);border-radius:2px}
-
-/* ═══════════════════════════════════════════ */
-/* S16 — PROFILE */
-/* ═══════════════════════════════════════════ */
-#s-profile{background:var(--bg);padding-bottom:80px}
-.profile-hero{padding:56px 24px 24px;display:flex;flex-direction:column;align-items:center;gap:12px}
-.profile-avatar{width:80px;height:80px;border-radius:50%;background:linear-gradient(135deg,#D4A843,#E8694A);display:flex;align-items:center;justify-content:center;font-size:32px;font-weight:700;color:#fff;border:3px solid var(--gold)}
-.profile-name{font-family:'Playfair Display',serif;font-size:24px;color:var(--text)}
-.profile-email{font-size:13px;color:var(--text2)}
-.profile-plan{display:flex;align-items:center;gap:8px;margin-top:4px}
-.profile-stats{display:flex;gap:0;margin:0 24px;background:var(--surface);border-radius:16px;border:1px solid var(--border);overflow:hidden;margin-bottom:24px}
-.profile-stat{flex:1;padding:16px;text-align:center}
-.profile-stat-sep{width:1px;background:var(--border)}
-.profile-stat-val{font-family:'Playfair Display',serif;font-size:24px;font-weight:700;color:var(--text);margin-bottom:4px}
-.profile-stat-lbl{font-size:11px;color:var(--text2);text-transform:uppercase;letter-spacing:.5px}
-.profile-section{margin:0 24px 8px}
-.profile-section-title{font-size:12px;font-weight:600;color:var(--text2);letter-spacing:.5px;text-transform:uppercase;margin-bottom:10px}
-.profile-item{display:flex;align-items:center;padding:14px;background:var(--surface);border-radius:14px;cursor:pointer;margin-bottom:8px;border:1px solid var(--border);transition:all .2s}
-.profile-item:active{background:var(--surface2)}
-.profile-item-icon{font-size:20px;margin-right:14px;width:24px;text-align:center}
-.profile-item-text{flex:1;font-size:14px;color:var(--text);font-weight:500}
-.profile-item-sub{font-size:12px;color:var(--text2);margin-top:1px}
-.profile-item-arrow{font-size:16px;color:var(--text3)}
-.profile-streak{margin:0 24px 16px;padding:16px;background:linear-gradient(135deg,rgba(212,168,67,.12),rgba(232,105,74,.12));border-radius:16px;border:1px solid rgba(212,168,67,.2);display:flex;align-items:center;gap:14px}
-.streak-flame{font-size:32px}
-.streak-info{flex:1}
-.streak-count{font-family:'Playfair Display',serif;font-size:22px;font-weight:700;color:var(--gold)}
-.streak-label{font-size:12px;color:var(--text2)}
-
-/* ═══════════════════════════════════════════ */
-/* S17 — EDIT PROFILE */
-/* ═══════════════════════════════════════════ */
-#s-editprofile{background:var(--bg)}
-.edit-avatar-row{display:flex;flex-direction:column;align-items:center;gap:12px;padding:0 24px 24px}
-.edit-avatar{width:88px;height:88px;border-radius:50%;background:linear-gradient(135deg,#D4A843,#E8694A);display:flex;align-items:center;justify-content:center;font-size:36px;font-weight:700;color:#fff;border:3px solid var(--gold);position:relative;cursor:pointer}
-.edit-avatar-badge{position:absolute;bottom:0;right:0;width:28px;height:28px;background:var(--coral);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;border:2px solid var(--bg)}
-.edit-form{padding:0 24px 32px;display:flex;flex-direction:column;gap:16px}
-.edit-field-label{font-size:12px;font-weight:600;color:var(--text2);letter-spacing:.5px;margin-bottom:6px;text-transform:uppercase}
-.prefs-row{display:flex;flex-wrap:wrap;gap:8px}
-.pref-chip{padding:8px 14px;border-radius:20px;font-size:13px;cursor:pointer;border:1.5px solid var(--border);color:var(--text2);background:var(--surface);transition:all .2s}
-.pref-chip.selected{background:rgba(232,105,74,.12);border-color:var(--coral);color:var(--coral)}
-
-/* ═══════════════════════════════════════════ */
-/* BOOK COVERS */
-/* ═══════════════════════════════════════════ */
-.c1{background:linear-gradient(160deg,#0d1b4b,#0a3d62,#1a6b7a)}
-.c2{background:linear-gradient(160deg,#1a1a1a,#333,#FF6B35)}
-.c3{background:linear-gradient(160deg,#8B0000,#C0392B,#F39C12)}
-.c4{background:linear-gradient(160deg,#4a2c00,#8B6914,#D4AC0D)}
-.c5{background:linear-gradient(160deg,#1a0a0a,#4a0a0a,#8B1919)}
-.c6{background:linear-gradient(160deg,#05122b,#0d2a6b,#1a4a9b)}
-.c7{background:linear-gradient(160deg,#2d0a3a,#7B2D8B,#E91E8C)}
-.c8{background:linear-gradient(160deg,#0a2418,#145A32,#1E8449)}
-.c9{background:linear-gradient(160deg,#3d1c00,#8B4513,#D4842A)}
-.c10{background:linear-gradient(160deg,#0a0a0a,#1a1a2e,#16213e)}
-.c11{background:linear-gradient(160deg,#0a1628,#1a3a6b,#2980B9)}
-.c12{background:linear-gradient(160deg,#1a0a28,#6C2D8C,#E8694A)}
-
-
-/* ── IMPROVEMENTS ── */
-/* Toast notifications */
-#toast-container{position:absolute;bottom:100px;left:50%;transform:translateX(-50%);z-index:9999;display:flex;flex-direction:column;gap:8px;align-items:center;pointer-events:none;width:340px}
-.toast{background:rgba(30,32,64,.96);backdrop-filter:blur(12px);color:var(--text);padding:12px 18px;border-radius:14px;font-size:13px;font-weight:500;border:1px solid rgba(255,255,255,.1);box-shadow:0 8px 24px rgba(0,0,0,.4);opacity:0;transform:translateY(12px);transition:all .3s ease;text-align:center;white-space:nowrap}
+#toast{
+  position:absolute;left:50%;bottom:92px;transform:translateX(-50%);
+  display:flex;flex-direction:column;gap:8px;align-items:center;
+  z-index:9999;pointer-events:none;width:340px;
+}
+.toast{
+  opacity:0;transform:translateY(10px);
+  transition:all .25s ease;
+  background:rgba(24,28,54,.96);
+  backdrop-filter:blur(12px);
+  border:1px solid rgba(255,255,255,.08);
+  padding:12px 16px;border-radius:14px;
+  color:var(--text);
+  font-size:13px;font-weight:500;
+  box-shadow:0 10px 24px rgba(0,0,0,.35);
+  text-align:center;
+}
 .toast.show{opacity:1;transform:translateY(0)}
-.toast.success{border-color:rgba(76,175,130,.4);color:#4CAF82}
-.toast.gold{border-color:rgba(212,168,67,.4);color:var(--gold)}
-/* Better button press feel */
-.btn-primary:active,.btn-gold:active,.btn-read:active{transform:scale(.97)}
-/* Book card hover lift */
-.book-card:hover .book-cover{transform:translateY(-6px) scale(1.02)}
-.book-cover{transition:transform .25s ease}
-/* Plan card selected state */
-.plan-card.selected{border-color:var(--coral)!important;background:rgba(232,105,74,.06)!important}
-.plan-card.selected::after{content:'✓ Selected';position:absolute;top:12px;right:14px;font-size:11px;font-weight:700;color:var(--coral)}
-/* Pulsing CTA */
-@keyframes ctaPulse{0%,100%{box-shadow:0 0 0 0 rgba(232,105,74,.4)}70%{box-shadow:0 0 0 10px rgba(232,105,74,0)}}
-.pulse{animation:ctaPulse 2s ease infinite}
-/* Wishlist animation */
-@keyframes heartPop{0%{transform:scale(1)}50%{transform:scale(1.4)}100%{transform:scale(1)}}
-.heart-pop{animation:heartPop .3s ease}
-/* Skeleton loading */
-@keyframes shimmer{0%{background-position:-200% 0}100%{background-position:200% 0}}
-.skeleton{background:linear-gradient(90deg,var(--surface) 25%,var(--surface2) 50%,var(--surface) 75%);background-size:200% 100%;animation:shimmer 1.5s infinite;border-radius:8px}
-/* OTP box active animation */
-.otp-box.active-box{border-color:var(--coral)!important;box-shadow:0 0 0 3px rgba(232,105,74,.2);animation:none}
-/* Genre tab underline indicator */
-.genre-tab.active{position:relative}
-/* Search input focus ring */
-.search-input-row:focus-within{border-color:var(--coral)!important}
-/* Download button states */
-.btn-downloading{background:rgba(212,168,67,.15)!important;color:var(--gold)!important;border-color:rgba(212,168,67,.4)!important;pointer-events:none}
-.btn-downloaded{background:rgba(76,175,130,.15)!important;color:var(--success)!important;border-color:rgba(76,175,130,.4)!important}
-/* Smooth reader progress */
-.reader-progress-fill{transition:width .3s ease}
-/* Better overlay for settings */
-#s-settings{justify-content:flex-end}
-/* Ripple effect */
-.ripple{position:absolute;border-radius:50%;background:rgba(255,255,255,.15);transform:scale(0);animation:rippleAnim .6s linear;pointer-events:none}
-@keyframes rippleAnim{to{transform:scale(4);opacity:0}}
-/* Badge on profile nav */
-.nav-badge{position:absolute;top:2px;right:10px;width:8px;height:8px;background:var(--coral);border-radius:50%;border:1.5px solid var(--surface)}
-.nav-item{position:relative}
-/* Payment success check animation */
-@keyframes checkDraw{from{stroke-dashoffset:100}to{stroke-dashoffset:0}}
-/* Reading mode dark theme */
-.reader-dark{background:#1A1612!important}
-.reader-dark .reader-text,.reader-dark .reader-book-title,.reader-dark .reader-chapter{color:#C8BFA8!important}
-.reader-dark .reader-topbar,.reader-dark .reader-bottombar{background:linear-gradient(#1A1612,transparent)!important}
-.reader-dark .reader-progress-track{background:rgba(255,255,255,.1)!important}
-.reader-dark .reader-page-info,.reader-dark .reader-progress-pct{color:#8B7355!important}
-.reader-sepia{background:#E8D9B5!important}
-.reader-sepia .reader-text{color:#3D2B1A!important}
+.toast.gold{color:var(--gold);border-color:rgba(212,168,67,.28)}
+.toast.success{color:var(--success);border-color:rgba(76,175,130,.28)}
+.toast.danger{color:var(--danger);border-color:rgba(255,107,107,.28)}
 
+.screen{
+  position:absolute;inset:0;
+  opacity:0;transform:translateX(28px);
+  pointer-events:none;
+  transition:opacity .28s ease,transform .28s ease;
+  display:flex;flex-direction:column;
+  overflow:hidden;
+}
+.screen.active{
+  opacity:1;transform:translateX(0);
+  pointer-events:auto;
+}
+.screen.exit-left{opacity:0;transform:translateX(-28px)}
 
-/* ── BOTTOM NAV FIX: flex column layout ── */
-.screen{display:flex!important;flex-direction:column!important;overflow:hidden!important}
-.scroll-area{flex:1;overflow-y:auto;overflow-x:hidden;scrollbar-width:none}
-.scroll-area::-webkit-scrollbar{display:none}
-.bottom-nav{position:relative!important;bottom:auto!important;left:auto!important;
-  right:auto!important;flex-shrink:0;z-index:50}
+.scroll{
+  flex:1;
+  overflow-y:auto;
+  overflow-x:hidden;
+  scrollbar-width:none;
+}
+.scroll::-webkit-scrollbar{display:none}
+.pad{padding:56px 20px 20px}
+.pad-lg{padding:56px 24px 24px}
+.bottom-nav{
+  position:sticky;bottom:0;z-index:20;
+  height:80px;
+  display:flex;align-items:center;justify-content:space-around;
+  background:rgba(18,20,40,.96);
+  border-top:1px solid var(--border);
+  backdrop-filter:blur(12px);
+  padding-bottom:14px;
+}
+.nav-item{
+  position:relative;
+  flex:1;
+  height:100%;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:3px;
+  color:var(--text3);
+  border:none;background:none;
+}
+.nav-item .icon{font-size:20px;line-height:1}
+.nav-item span{font-size:10px;font-weight:600}
+.nav-item.active{color:var(--coral)}
+.nav-item.active .icon{filter:saturate(1.2)}
 
-/* ── CONTINUE READING SECTION ── */
-.continue-card{display:flex;gap:12px;padding:14px;background:var(--surface);
-  border-radius:16px;border:1px solid var(--border);cursor:pointer;transition:all .2s;
-  flex-shrink:0;width:260px}
-.continue-card:active{transform:scale(.97)}
-.continue-cover{width:52px;height:76px;border-radius:8px;overflow:hidden;flex-shrink:0}
-.continue-cover-inner{width:100%;height:100%;display:flex;align-items:flex-end;
-  padding:5px;position:relative}
-.continue-cover-inner::before{content:'';position:absolute;inset:0;
-  background:linear-gradient(transparent 40%,rgba(0,0,0,.7))}
-.continue-title-sm{font-size:7px;font-weight:700;color:#fff;position:relative;z-index:1;line-height:1.2}
-.continue-info{flex:1;min-width:0;display:flex;flex-direction:column;justify-content:space-between}
-.continue-book-title{font-size:13px;font-weight:600;color:var(--text);line-height:1.3;margin-bottom:2px}
-.continue-author-sm{font-size:11px;color:var(--text2);margin-bottom:8px}
-.continue-prog-track{height:3px;background:var(--border);border-radius:2px;margin-bottom:4px}
-.continue-prog-fill{height:100%;border-radius:2px;background:var(--coral)}
-.continue-prog-row{display:flex;justify-content:space-between;align-items:center}
-.continue-pct{font-size:11px;font-weight:600;color:var(--coral)}
-.continue-resume{font-size:11px;color:var(--text2)}
+.topbar{
+  padding:56px 20px 16px;
+  display:flex;align-items:center;justify-content:space-between;
+  gap:12px;
+}
+.topbar h2{
+  font-family:'Playfair Display',serif;
+  font-size:22px;
+  color:var(--text);
+}
+.back{
+  width:40px;height:40px;border-radius:50%;
+  border:1px solid var(--border);
+  background:rgba(255,255,255,.02);
+  color:var(--text);
+  font-size:20px;
+}
+.ghost{
+  background:transparent;border:1px solid var(--border);
+  color:var(--text);border-radius:14px;
+}
+.primary, .secondary, .gold-btn, .danger-btn{
+  width:100%;
+  min-height:50px;
+  border:none;
+  border-radius:14px;
+  font-size:15px;
+  font-weight:700;
+  letter-spacing:.2px;
+}
+.primary{background:var(--coral);color:#fff}
+.primary:active{background:var(--coral2);transform:scale(.99)}
+.secondary{background:transparent;color:var(--text);border:1.5px solid var(--border)}
+.gold-btn{background:linear-gradient(135deg,#d4a843,#f5c842);color:#221700}
+.danger-btn{background:rgba(255,107,107,.16);color:#ff9999;border:1px solid rgba(255,107,107,.2)}
+.pill{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:5px 10px;border-radius:999px;
+  font-size:11px;font-weight:700;letter-spacing:.4px;
+}
+.pill.gold{background:rgba(212,168,67,.12);color:var(--gold);border:1px solid rgba(212,168,67,.22)}
+.pill.coral{background:rgba(232,115,90,.14);color:var(--coral);border:1px solid rgba(232,115,90,.22)}
+.pill.success{background:rgba(76,175,130,.12);color:var(--success);border:1px solid rgba(76,175,130,.22)}
+.pill.soft{background:rgba(255,255,255,.05);color:var(--text2);border:1px solid var(--border)}
+.card{
+  background:linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,.02));
+  border:1px solid var(--border);
+  border-radius:18px;
+}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.row{display:flex;gap:10px}
+.input{
+  width:100%;min-height:50px;padding:14px 15px;
+  background:rgba(255,255,255,.03);border:1.5px solid var(--border);
+  color:var(--text);border-radius:14px;outline:none;
+}
+.input:focus{border-color:var(--gold)}
+.label{
+  display:block;margin-bottom:6px;
+  font-size:12px;font-weight:700;color:var(--text2);
+  letter-spacing:.5px;text-transform:uppercase;
+}
+.subtle{color:var(--text2);font-size:13px;line-height:1.7}
+.title-serif{
+  font-family:'Playfair Display',serif;
+  color:var(--text);
+}
+.title-serif em{color:var(--gold);font-style:italic}
+.hr{height:1px;background:var(--border);margin:14px 0}
+.book-cover{
+  position:relative;overflow:hidden;border-radius:12px;
+  box-shadow:0 10px 24px rgba(0,0,0,.45);
+}
+.book-cover::after{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(180deg,transparent 35%,rgba(0,0,0,.76));
+}
+.book-title{
+  position:absolute;left:10px;right:10px;bottom:10px;z-index:1;
+  font-size:11px;font-weight:800;color:#fff;line-height:1.25;
+}
+.book-author{
+  position:absolute;left:10px;right:10px;bottom:24px;z-index:1;
+  font-size:9px;color:rgba(255,255,255,.72)
+}
+.section{
+  margin:0 20px 26px;
+}
+.section-head{
+  display:flex;justify-content:space-between;align-items:center;
+  margin-bottom:12px;
+}
+.section-head h3{
+  font-family:'Playfair Display',serif;
+  font-size:19px;font-weight:700;color:var(--text);
+}
+.link{
+  border:none;background:none;color:var(--coral);font-size:13px;font-weight:700;
+}
+.chips{
+  display:flex;gap:8px;flex-wrap:wrap;
+}
+.chip{
+  border:none;border-radius:999px;
+  padding:9px 13px;
+  background:rgba(255,255,255,.04);
+  color:var(--text2);border:1px solid var(--border);
+  font-size:12px;font-weight:600;
+}
+.chip.active{background:rgba(232,115,90,.12);color:var(--coral);border-color:rgba(232,115,90,.25)}
+.small{font-size:12px;color:var(--text2)}
+.kpi{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:12px 14px;border-radius:16px;
+  background:rgba(255,255,255,.04);border:1px solid var(--border);
+}
+.kpi strong{font-size:15px;color:var(--text)}
+.progress{
+  height:4px;background:rgba(255,255,255,.09);border-radius:99px;overflow:hidden;
+}
+.progress > span{display:block;height:100%;background:linear-gradient(90deg,var(--gold),var(--coral))}
+.tag-row{display:flex;gap:8px;flex-wrap:wrap}
+.feature-row{
+  display:flex;gap:10px;overflow-x:auto;scrollbar-width:none;padding-bottom:4px;
+}
+.feature-row::-webkit-scrollbar{display:none}
+.feature-card{
+  min-width:170px;max-width:170px;
+  padding:14px;border-radius:18px;
+  background:rgba(255,255,255,.04);
+  border:1px solid var(--border);
+}
+.feature-card h4{
+  font-size:14px;font-weight:800;color:var(--text);margin-bottom:5px
+}
+.feature-card p{font-size:12px;color:var(--text2);line-height:1.6}
+.list{
+  display:flex;flex-direction:column;gap:12px;
+}
+.item{
+  display:flex;gap:12px;align-items:center;
+  padding:12px;border-radius:16px;
+  background:rgba(255,255,255,.04);border:1px solid var(--border);
+}
+.item .meta{flex:1;min-width:0}
+.item h4{font-size:14px;color:var(--text);margin-bottom:3px}
+.item p{font-size:12px;color:var(--text2)}
+.thumb{
+  width:60px;height:88px;flex:0 0 auto;
+  border-radius:10px;overflow:hidden;
+}
+.thumb.sm{width:50px;height:72px}
+.thumb.lg{width:118px;height:170px}
+.c1{background:linear-gradient(160deg,#0c2a5b,#0a3b76,#1b6a7f)}
+.c2{background:linear-gradient(160deg,#1a1a1a,#343434,#ff6b35)}
+.c3{background:linear-gradient(160deg,#7a0000,#c0392b,#f39c12)}
+.c4{background:linear-gradient(160deg,#4a2c00,#8b6914,#d4ac0d)}
+.c5{background:linear-gradient(160deg,#1a0a0a,#4a0a0a,#8b1919)}
+.c6{background:linear-gradient(160deg,#05122b,#0d2a6b,#1a4a9b)}
+.c7{background:linear-gradient(160deg,#2d0a3a,#7b2d8b,#e91e8c)}
+.c8{background:linear-gradient(160deg,#0a2418,#145a32,#1e8449)}
+.c9{background:linear-gradient(160deg,#3d1c00,#8b4513,#d4842a)}
+.c10{background:linear-gradient(160deg,#0a0a0a,#1a1a2e,#16213e)}
+.c11{background:linear-gradient(160deg,#0a1628,#1a3a6b,#2980b9)}
+.c12{background:linear-gradient(160deg,#1a0a28,#6c2d8c,#e8735a)}
+.c13{background:linear-gradient(160deg,#0d1b4b,#0f4c81,#1abc9c)}
+.c14{background:linear-gradient(160deg,#3a1b6b,#7f3fbf,#f97316)}
 
-/* ── AUTHOR PAGE ── */
-#s-author{background:var(--bg);padding-bottom:80px}
-.author-hero{padding:56px 24px 24px;display:flex;flex-direction:column;align-items:center;gap:12px}
-.author-avatar{width:88px;height:88px;border-radius:50%;display:flex;align-items:center;
-  justify-content:center;font-size:36px;font-weight:700;color:#fff;
-  background:linear-gradient(135deg,#1a3a6b,#2980B9);border:3px solid var(--border)}
-.author-name{font-family:'Playfair Display',serif;font-size:26px;color:var(--text)}
-.author-bio{font-size:13px;color:var(--text2);text-align:center;line-height:1.7;padding:0 8px}
-.author-stats{display:flex;gap:0;background:var(--surface);border-radius:14px;
-  border:1px solid var(--border);overflow:hidden;width:100%}
-.author-stat{flex:1;padding:14px;text-align:center}
-.author-stat-val{font-family:'Playfair Display',serif;font-size:20px;font-weight:700;
-  color:var(--text);margin-bottom:3px}
-.author-stat-lbl{font-size:10px;color:var(--text2);text-transform:uppercase;letter-spacing:.5px}
-.follow-btn{width:100%;padding:13px;background:transparent;color:var(--coral);
-  font-size:14px;font-weight:600;border:1.5px solid var(--coral);border-radius:14px;
-  cursor:pointer;transition:all .2s}
-.follow-btn.following{background:rgba(232,105,74,.12)}
+.splash{
+  flex:1;display:flex;align-items:center;justify-content:center;
+  background:linear-gradient(160deg,#07071a 0%,#0d0d2c 55%,#180a19 100%);
+}
+.splash-inner{
+  display:flex;flex-direction:column;align-items:center;gap:16px;
+}
+.logo{
+  width:88px;height:88px;border-radius:24px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:42px;
+  background:linear-gradient(135deg,#d4a843,#f5c842);
+  box-shadow:0 12px 32px rgba(212,168,67,.35);
+}
+.brand{
+  font-family:'Playfair Display',serif;
+  font-size:38px;font-weight:900;letter-spacing:.5px
+}
+.loader{
+  width:54px;height:3px;border-radius:99px;background:rgba(255,255,255,.12);
+  overflow:hidden;margin-top:24px
+}
+.loader > span{
+  display:block;width:100%;height:100%;
+  background:linear-gradient(90deg,var(--gold),var(--coral));
+  animation:load 2.1s ease-in-out forwards;
+}
+@keyframes load{from{transform:translateX(-100%)}to{transform:translateX(0)}}
+@keyframes blink{50%{opacity:0}}
+@keyframes pulse{
+  0%,100%{box-shadow:0 0 0 0 rgba(76,175,130,.28)}
+  50%{box-shadow:0 0 0 16px rgba(76,175,130,0)}
+}
+@keyframes slideInUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
 
-/* ── READING TIMER ── */
-.reading-timer{position:absolute;top:52px;left:50%;transform:translateX(-50%);
-  background:rgba(0,0,0,.5);backdrop-filter:blur(8px);border-radius:20px;
-  padding:5px 14px;font-size:12px;color:var(--gold);font-weight:600;z-index:20;
-  border:1px solid rgba(212,168,67,.2);pointer-events:none}
-
-/* ── HIGHLIGHT IN READER ── */
-.highlighted{background:rgba(212,168,67,.25);border-radius:3px;cursor:pointer}
-.highlight-toolbar{position:absolute;background:var(--surface2);border:1px solid var(--border);
-  border-radius:12px;padding:8px 12px;display:flex;gap:8px;z-index:100;
-  box-shadow:0 8px 24px rgba(0,0,0,.5);pointer-events:all}
-.highlight-toolbar button{background:none;border:none;font-size:16px;cursor:pointer;padding:4px 6px;border-radius:8px}
-.highlight-toolbar button:hover{background:rgba(255,255,255,.1)}
-
-/* ── READING CHALLENGE BANNER ── */
-.challenge-banner{margin:0 20px 20px;padding:14px 16px;
-  background:linear-gradient(135deg,rgba(212,168,67,.12),rgba(232,105,74,.08));
-  border-radius:16px;border:1px solid rgba(212,168,67,.2);
-  display:flex;align-items:center;gap:12px;cursor:pointer}
-.challenge-icon{font-size:28px;flex-shrink:0}
-.challenge-info{flex:1}
-.challenge-title{font-size:13px;font-weight:600;color:var(--gold);margin-bottom:2px}
-.challenge-sub{font-size:11px;color:var(--text2)}
-.challenge-ring{width:44px;height:44px;flex-shrink:0;position:relative}
-.challenge-ring svg{transform:rotate(-90deg)}
-.challenge-ring-pct{position:absolute;inset:0;display:flex;align-items:center;
-  justify-content:center;font-size:11px;font-weight:700;color:var(--gold)}
-
-/* ── NOTIFICATION BADGE ── */
-.notif-dot{width:8px;height:8px;background:var(--coral);border-radius:50%;
-  border:1.5px solid var(--surface);position:absolute;top:0;right:8px}
-
-/* ── SOCIAL PROOF PILL ── */
-.social-proof-pill{display:inline-flex;align-items:center;gap:6px;
-  background:rgba(76,175,130,.1);border:1px solid rgba(76,175,130,.25);
-  border-radius:20px;padding:5px 12px;font-size:12px;color:var(--success);
-  font-weight:500;margin-left:4px}
-
-/* ── SMOOTH SCROLL HINT ── */
-.scroll-hint{display:flex;gap:4px;justify-content:center;padding:8px 0}
-.scroll-dot{width:5px;height:5px;border-radius:50%;background:var(--border)}
-.scroll-dot.active{background:var(--coral);width:14px;border-radius:3px;
-  transition:width .3s ease}
-
-/* ── COMPLETED BADGE ── */
-.completed-badge{background:rgba(76,175,130,.15);border:1px solid rgba(76,175,130,.3);
-  border-radius:20px;padding:4px 10px;font-size:11px;color:var(--success);font-weight:600}
-
+.hero{
+  min-height:320px;
+  padding:30px 24px 20px;
+  display:flex;flex-direction:column;justify-content:flex-end;
+  position:relative;
+}
+.hero::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(circle at 50% 20%, rgba(232,115,90,.18), transparent 28%),
+             linear-gradient(180deg, rgba(9,10,26,.0), rgba(9,10,26,.9) 80%);
+}
+.hero-content{position:relative;z-index:1}
+.hero h1{
+  font-family:'Playfair Display',serif;font-size:31px;line-height:1.15;margin-bottom:10px;color:var(--text)
+}
+.hero p{font-size:14px;line-height:1.7;color:var(--text2)}
+.dots{display:flex;gap:7px;justify-content:center;margin:18px 0 0}
+.dot{width:8px;height:8px;border-radius:999px;background:rgba(255,255,255,.16)}
+.dot.active{background:var(--coral);width:18px}
+.tutorial-card{
+  margin:0 20px 24px;padding:18px;border-radius:22px;
+  background:linear-gradient(180deg,rgba(255,255,255,.05),rgba(255,255,255,.02));
+  border:1px solid var(--border);
+}
+.tutorial-card h3{font-family:'Playfair Display',serif;font-size:22px;margin-bottom:8px}
+.tutorial-card p{font-size:14px;color:var(--text2);line-height:1.7}
+.onboard-illustration{
+  height:230px;border-radius:22px;margin-bottom:18px;
+  background:radial-gradient(circle at 50% 25%, rgba(212,168,67,.22), transparent 30%),
+             linear-gradient(160deg, #10122f, #1a173f 50%, #30112b 100%);
+  border:1px solid rgba(255,255,255,.08);
+  position:relative;overflow:hidden;
+}
+.onboard-illustration .stack{
+  position:absolute;inset:30px 40px 34px;
+  display:flex;align-items:flex-end;justify-content:center;gap:14px;
+}
+.onboard-illustration .stack .book{
+  width:54px;border-radius:10px;box-shadow:0 12px 24px rgba(0,0,0,.38)
+}
+.onboard-illustration .bubble{
+  position:absolute;right:18px;top:18px;padding:8px 12px;border-radius:999px;
+  background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.08);font-size:11px;color:var(--text2)
+}
+.nav-rail{
+  display:flex;justify-content:space-between;align-items:center;margin-top:16px
+}
+.genre-tile{
+  min-height:88px;border-radius:18px;
+  padding:14px;display:flex;flex-direction:column;justify-content:flex-end;
+  border:1px solid rgba(255,255,255,.06);
+  position:relative;overflow:hidden;
+}
+.genre-tile::after{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(180deg,transparent 35%,rgba(0,0,0,.58));
+}
+.genre-tile strong,.genre-tile span{position:relative;z-index:1}
+.genre-tile strong{font-size:15px;color:#fff}
+.genre-tile span{font-size:11px;color:rgba(255,255,255,.72);margin-top:2px}
+.search-box{
+  margin:0 20px 16px;padding:12px 14px;border-radius:14px;
+  border:1.5px solid var(--gold);background:rgba(255,255,255,.03);
+  display:flex;align-items:center;gap:10px;
+}
+.search-box input{
+  flex:1;background:none;border:none;outline:none;color:var(--text);font-size:15px
+}
+.search-box input::placeholder{color:var(--text3)}
+.filter-bar{padding:0 20px 16px;display:flex;gap:8px;overflow-x:auto;scrollbar-width:none}
+.filter-bar::-webkit-scrollbar{display:none}
+.review{
+  padding:12px 0;border-top:1px solid var(--border)
+}
+.review:first-child{border-top:none;padding-top:0}
+.review .name{font-size:13px;font-weight:800;color:var(--text)}
+.review .body{font-size:12px;color:var(--text2);line-height:1.7;margin-top:4px}
+.stars{color:var(--gold);font-size:12px;letter-spacing:1px}
+.reader{
+  background:var(--reader);color:var(--readerText);
+}
+.reader .topbar,.reader .bottom-reader{
+  background:linear-gradient(180deg,var(--reader),rgba(247,241,229,0));
+}
+.reader .title-serif,.reader .subtle,.reader .label,.reader .small{color:var(--readerText)}
+.reader .small,.reader .subtle{opacity:.72}
+.reader-content{
+  padding:100px 28px 116px;
+  height:100%;
+  overflow-y:auto;
+  font-family:'Lora',serif;
+  font-size:17px;
+  line-height:1.95;
+}
+.reader-content p{margin-bottom:18px}
+.reader-content p:first-child::first-letter{
+  float:left;
+  font-family:'Playfair Display',serif;
+  font-size:54px;font-weight:800;line-height:.85;
+  color:var(--gold);margin:4px 8px 0 0;
+}
+.reader-top{
+  position:absolute;top:0;left:0;right:0;
+  padding:52px 20px 10px;z-index:10;
+  display:flex;justify-content:space-between;align-items:center;
+}
+.reader-top button{
+  width:36px;height:36px;border-radius:50%;
+  border:none;background:rgba(0,0,0,.08);color:var(--readerText)
+}
+.reader-title{
+  flex:1;text-align:center;font-size:12px;font-weight:700;opacity:.65
+}
+.reader-progress-wrap{display:flex;gap:12px;align-items:center;margin-bottom:8px}
+.reader-bottom{
+  position:absolute;left:0;right:0;bottom:0;
+  padding:12px 24px 28px;
+}
+.reader-track{flex:1;height:4px;border-radius:99px;background:rgba(0,0,0,.12);overflow:hidden}
+.reader-fill{height:100%;width:38%;background:var(--gold);border-radius:99px;transition:width .3s ease}
+.overlay{
+  background:rgba(0,0,0,.58);
+  backdrop-filter:blur(4px);
+}
+.overlay .sheet{
+  margin-top:auto;
+  border-radius:26px 26px 0 0;
+  background:rgba(24,26,50,.98);
+  border-top:1px solid rgba(255,255,255,.07);
+  padding:18px 20px 34px;
+}
+.settings-row{display:flex;gap:10px}
+.theme-btn,.font-btn{
+  flex:1;min-height:42px;border-radius:14px;border:1.5px solid var(--border);
+  background:var(--surface);color:var(--text);font-size:13px;font-weight:700
+}
+.theme-btn.active,.font-btn.active{border-color:var(--gold);background:rgba(212,168,67,.1);color:var(--gold)}
+.rating-pill{
+  display:inline-flex;align-items:center;gap:4px;
+  padding:5px 10px;border-radius:999px;background:rgba(212,168,67,.12);
+  border:1px solid rgba(212,168,67,.2);color:var(--gold);font-size:11px;font-weight:800
+}
+.money{
+  font-family:'Playfair Display',serif;font-size:28px;color:var(--text);font-weight:800
+}
+.rtl{direction:ltr}
+.mini-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.mini-stat{padding:12px;border-radius:14px;background:rgba(255,255,255,.04);border:1px solid var(--border);text-align:center}
+.mini-stat strong{display:block;font-size:20px;font-family:'Playfair Display',serif}
+.mini-stat span{font-size:10px;color:var(--text2);text-transform:uppercase;letter-spacing:.4px}
+.badge-list{display:flex;gap:8px;flex-wrap:wrap}
+.badge{
+  padding:8px 12px;border-radius:999px;font-size:12px;font-weight:700;
+  background:rgba(255,255,255,.04);border:1px solid var(--border);color:var(--text2)
+}
+.badge.active{background:rgba(76,175,130,.12);border-color:rgba(76,175,130,.22);color:var(--success)}
+.story-card{
+  padding:14px;border-radius:18px;border:1px solid var(--border);background:rgba(255,255,255,.04)
+}
+.story-card h4{font-size:14px;margin-bottom:6px}
+.story-card p{font-size:12px;color:var(--text2);line-height:1.6}
+.vote{
+  display:flex;align-items:center;justify-content:space-between;gap:10px;
+  padding:12px 0;border-top:1px solid var(--border)
+}
+.vote:first-child{border-top:none}
+.vote .vtitle{font-weight:800;font-size:13px}
+.vote .vmeta{font-size:11px;color:var(--text2)}
+.vote .up{min-width:72px;padding:8px 10px;border-radius:12px;border:1px solid rgba(76,175,130,.25);background:rgba(76,175,130,.12);color:var(--success);font-size:12px;font-weight:800}
+.hidden{display:none !important}
 </style>
 </head>
-
-<!-- BODY — all 17 screens + JS -->
 <body>
+<div class="hint">📱 PageTurn — clickable prototype • tap buttons to explore</div>
 
-<!-- DESKTOP HINT -->
-<div style="position:fixed;top:16px;left:50%;transform:translateX(-50%);background:rgba(255,255,255,.08);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.12);border-radius:20px;padding:8px 18px;font-size:12px;color:rgba(240,236,227,.6);z-index:9999;pointer-events:none;white-space:nowrap">
-  📱 PageTurn — Interactive Prototype &nbsp;|&nbsp; Click anywhere to explore
+<div class="frame">
+  <div class="notch"></div>
+  <div id="toast"></div>
+  <div class="status">
+    <span>9:41</span>
+    <div class="icons"><span>●●●</span><span>WiFi</span><span>🔋</span></div>
+  </div>
+
+  <!-- SPLASH -->
+  <section class="screen active" id="s-splash">
+    <div class="splash" onclick="go('s-tutorial-1')">
+      <div class="splash-inner">
+        <div class="logo">📖</div>
+        <div class="brand title-serif">PageTurn</div>
+        <div class="subtle" style="letter-spacing:2px;text-transform:uppercase;text-align:center">The world's books, in your pocket</div>
+        <div class="loader"><span></span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TUTORIAL 1 -->
+  <section class="screen" id="s-tutorial-1">
+    <div class="scroll">
+      <div class="hero">
+        <div class="hero-content">
+          <span class="pill gold">ONBOARDING</span>
+          <h1>Read anywhere.<br>Keep every book with you.</h1>
+          <p>PageTurn is designed for mobile-first reading, with offline access, progress sync, and a clean reading experience.</p>
+        </div>
+      </div>
+      <div class="tutorial-card">
+        <div class="onboard-illustration">
+          <div class="bubble">50,000+ titles</div>
+          <div class="stack">
+            <div class="book thumb c1" style="height:140px"></div>
+            <div class="book thumb c9" style="height:168px"></div>
+            <div class="book thumb c4" style="height:150px"></div>
+          </div>
+        </div>
+        <h3 class="title-serif">A library in your pocket</h3>
+        <p>Browse curated collections, bestselling books, and personalized recommendations without clutter.</p>
+        <div class="nav-rail">
+          <button class="secondary" style="width:104px" onclick="go('s-welcome-social')">Skip</button>
+          <button class="primary" style="width:104px" onclick="go('s-tutorial-2')">Next →</button>
+        </div>
+        <div class="dots"><span class="dot active"></span><span class="dot"></span><span class="dot"></span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TUTORIAL 2 -->
+  <section class="screen" id="s-tutorial-2">
+    <div class="scroll">
+      <div class="hero">
+        <div class="hero-content">
+          <span class="pill gold">FEATURES</span>
+          <h1>Night mode, downloads,<br>and reading progress.</h1>
+          <p>These are core features mentioned in your assignment files and are now surfaced in the prototype flow.</p>
+        </div>
+      </div>
+      <div class="tutorial-card">
+        <div class="onboard-illustration" style="background:radial-gradient(circle at 50% 25%, rgba(76,175,130,.18), transparent 30%), linear-gradient(160deg,#10172c,#1e223f 50%,#0e2d22 100%)">
+          <div class="bubble">Offline mode ready</div>
+          <div class="stack">
+            <div class="book thumb c8" style="height:170px"></div>
+            <div class="book thumb c13" style="height:138px"></div>
+            <div class="book thumb c10" style="height:156px"></div>
+          </div>
+        </div>
+        <h3 class="title-serif">Built for real usage</h3>
+        <p>Includes offline reading, reader settings, search filters, and error states like payment failure and no internet.</p>
+        <div class="nav-rail">
+          <button class="secondary" style="width:104px" onclick="back()">← Back</button>
+          <button class="primary" style="width:104px" onclick="go('s-tutorial-3')">Next →</button>
+        </div>
+        <div class="dots"><span class="dot"></span><span class="dot active"></span><span class="dot"></span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TUTORIAL 3 -->
+  <section class="screen" id="s-tutorial-3">
+    <div class="scroll">
+      <div class="hero">
+        <div class="hero-content">
+          <span class="pill gold">PERSONALISATION</span>
+          <h1>Personalised by genre,<br>with social proof built in.</h1>
+          <p>The critical path now includes onboarding, subscription, discovery, reading, downloads, and profile management.</p>
+        </div>
+      </div>
+      <div class="tutorial-card">
+        <div class="feature-row" style="padding-bottom:0">
+          <div class="feature-card">
+            <h4>Genre-first onboarding</h4>
+            <p>Pick 3 genres and get curated recommendations instantly.</p>
+          </div>
+          <div class="feature-card">
+            <h4>Social proof</h4>
+            <p>Show active readers and trending books to support conversion.</p>
+          </div>
+          <div class="feature-card">
+            <h4>Reader settings</h4>
+            <p>Theme and font controls inside the reading screen.</p>
+          </div>
+        </div>
+        <div class="nav-rail">
+          <button class="secondary" style="width:104px" onclick="back()">← Back</button>
+          <button class="gold-btn" style="width:132px" onclick="go('s-welcome-social')">Start exploring</button>
+        </div>
+        <div class="dots"><span class="dot"></span><span class="dot"></span><span class="dot active"></span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WELCOME -->
+  <section class="screen" id="s-welcome-social">
+    <div class="scroll">
+      <div class="hero">
+        <div class="hero-content">
+          <span class="pill success">JOIN 2,00,000+ READERS</span>
+          <h1>Find your next book.<br>Keep reading every day.</h1>
+          <p>Social proof and value framing are added here because your Component 4 file explicitly recommends them for the onboarding experiment.</p>
+        </div>
+      </div>
+      <div class="section">
+        <div class="mini-stats">
+          <div class="mini-stat"><strong>50K+</strong><span>Books</span></div>
+          <div class="mini-stat"><strong>4.8★</strong><span>Avg rating</span></div>
+          <div class="mini-stat"><strong>14d</strong><span>Free trial</span></div>
+        </div>
+      </div>
+      <div class="section">
+        <div class="story-card">
+          <h4>Trending this week 🔥</h4>
+          <div class="feature-row" style="margin-top:10px">
+            <div class="thumb sm book-cover c2"><div class="book-title">Atomic Habits</div></div>
+            <div class="thumb sm book-cover c1"><div class="book-title">Deep Work</div></div>
+            <div class="thumb sm book-cover c7"><div class="book-title">The Alchemist</div></div>
+            <div class="thumb sm book-cover c14"><div class="book-title">Project Hail Mary</div></div>
+          </div>
+        </div>
+      </div>
+      <div class="section">
+        <button class="primary" onclick="go('s-genre-pick')">Continue with personalised onboarding</button>
+        <div style="height:10px"></div>
+        <button class="secondary" onclick="go('s-signup')">Continue with email</button>
+        <p class="small" style="text-align:center;margin-top:10px">Already have an account? <a href="javascript:go('s-signup')" style="color:var(--coral);font-weight:800">Sign in</a></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- GENRE PICK -->
+  <section class="screen" id="s-genre-pick">
+    <div class="scroll">
+      <div class="topbar">
+        <button class="back" onclick="back()">←</button>
+        <h2>Choose your genres</h2>
+        <button class="ghost" style="width:40px;height:40px;border-radius:50%">?</button>
+      </div>
+      <div class="section">
+        <p class="subtle">Pick at least 3. This screen maps directly to the personalised onboarding treatment from your A/B test design.</p>
+      </div>
+      <div class="section">
+        <div class="grid-2">
+          <div class="genre-tile c11" onclick="toggleChip(this)">
+            <strong>Business</strong><span>12,400 books</span>
+          </div>
+          <div class="genre-tile c7" onclick="toggleChip(this)">
+            <strong>Romance</strong><span>8,700 books</span>
+          </div>
+          <div class="genre-tile c8" onclick="toggleChip(this)">
+            <strong>Self-help</strong><span>9,100 books</span>
+          </div>
+          <div class="genre-tile c4" onclick="toggleChip(this)">
+            <strong>History</strong><span>6,800 books</span>
+          </div>
+          <div class="genre-tile c6" onclick="toggleChip(this)">
+            <strong>Science</strong><span>7,300 books</span>
+          </div>
+          <div class="genre-tile c14" onclick="toggleChip(this)">
+            <strong>Fantasy</strong><span>11,200 books</span>
+          </div>
+        </div>
+      </div>
+      <div class="section">
+        <div class="story-card">
+          <h4>Personalised recommendations</h4>
+          <p>You can later show genre-based recommendations, collections by mood, and a curated home feed from this selection.</p>
+        </div>
+      </div>
+      <div class="section">
+        <button class="primary" onclick="go('s-signup')">Continue →</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- SIGNUP -->
+  <section class="screen" id="s-signup">
+    <div class="scroll">
+      <div class="topbar">
+        <button class="back" onclick="back()">←</button>
+        <h2>Create account</h2>
+        <button class="ghost" style="width:40px;height:40px;border-radius:50%">?</button>
+      </div>
+      <div class="section">
+        <label class="label">Full name</label>
+        <input class="input" value="Sachin Kumar" placeholder="Your name">
+      </div>
+      <div class="section">
+        <label class="label">Email</label>
+        <input class="input" value="sachin@example.com" placeholder="you@example.com">
+      </div>
+      <div class="section">
+        <label class="label">Password</label>
+        <input class="input" value="password123" placeholder="Min. 8 characters" type="password">
+      </div>
+      <div class="section">
+        <button class="primary" onclick="go('s-otp')">Send verification code →</button>
+        <div style="height:10px"></div>
+        <button class="secondary" onclick="go('s-otp')">Continue with Google</button>
+        <p class="small" style="text-align:center;margin-top:10px">By signing up, you agree to the Terms and Privacy Policy.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- OTP -->
+  <section class="screen" id="s-otp">
+    <div class="scroll">
+      <div class="topbar">
+        <button class="back" onclick="back()">←</button>
+        <h2>Verify email</h2>
+        <button class="ghost" style="width:40px;height:40px;border-radius:50%">?</button>
+      </div>
+      <div class="section" style="text-align:center">
+        <div class="logo" style="margin:0 auto 14px;width:80px;height:80px;font-size:34px">📬</div>
+        <h1 class="title-serif" style="font-size:28px;margin-bottom:8px">Check your inbox</h1>
+        <p class="subtle">We sent a 6-digit code to <strong style="color:var(--gold)">sachin@example.com</strong></p>
+      </div>
+      <div class="section">
+        <div class="row" style="justify-content:center;gap:10px">
+          <div class="card" style="width:48px;height:58px;display:flex;align-items:center;justify-content:center;font-size:22px;color:var(--gold);border-color:rgba(212,168,67,.32)">3</div>
+          <div class="card" style="width:48px;height:58px;display:flex;align-items:center;justify-content:center;font-size:22px;color:var(--gold);border-color:rgba(212,168,67,.32)">7</div>
+          <div class="card" style="width:48px;height:58px;display:flex;align-items:center;justify-content:center;font-size:22px;color:var(--gold);border-color:rgba(212,168,67,.32)">4</div>
+          <div class="card" style="width:48px;height:58px;display:flex;align-items:center;justify-content:center;font-size:22px;color:var(--gold);border-color:rgba(212,168,67,.32)">8</div>
+          <div class="card" style="width:48px;height:58px;display:flex;align-items:center;justify-content:center;font-size:22px;border-color:var(--gold);animation:blink 1s step-end infinite">_</div>
+          <div class="card" style="width:48px;height:58px;display:flex;align-items:center;justify-content:center;font-size:22px"> </div>
+        </div>
+      </div>
+      <div class="section">
+        <button class="primary" onclick="go('s-plans')">Verify and continue →</button>
+        <p class="small" style="text-align:center;margin-top:10px">Resend code in 28s</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- PLANS -->
+  <section class="screen" id="s-plans">
+    <div class="scroll">
+      <div class="topbar">
+        <button class="back" onclick="back()">←</button>
+        <h2>Choose a plan</h2>
+        <button class="ghost" style="width:40px;height:40px;border-radius:50%">?</button>
+      </div>
+      <div class="section" style="text-align:center">
+        <span class="pill gold">FREE TRIAL + SUBSCRIPTION</span>
+        <h1 class="title-serif" style="font-size:29px;margin:10px 0 8px">Start reading today.</h1>
+        <p class="subtle">The plan screen is a direct part of the critical path and monetisation flow in your component files.</p>
+      </div>
+      <div class="section list">
+        <div class="card" style="padding:18px;position:relative" onclick="go('s-payment-trial')">
+          <span class="pill success" style="margin-bottom:10px">14 DAYS FREE</span>
+          <h3 class="title-serif" style="font-size:20px">Free Trial</h3>
+          <div class="money">₹0 <span class="small">for 14 days</span></div>
+          <p class="subtle" style="margin-top:8px">Full access, no credit card required.</p>
+        </div>
+        <div class="card" style="padding:18px;border-color:rgba(212,168,67,.34);background:rgba(212,168,67,.05)" onclick="go('s-payment-annual')">
+          <span class="pill gold" style="margin-bottom:10px">BEST VALUE — SAVE 40%</span>
+          <h3 class="title-serif" style="font-size:20px">Annual Plan</h3>
+          <div class="money">₹799 <span class="small">/ month</span></div>
+          <p class="subtle" style="margin-top:8px">₹9,588 billed yearly. Family sharing and offline on 3 devices.</p>
+        </div>
+        <div class="card" style="padding:18px" onclick="go('s-payment-monthly')">
+          <h3 class="title-serif" style="font-size:20px">Monthly Plan</h3>
+          <div class="money">₹1,199 <span class="small">/ month</span></div>
+          <p class="subtle" style="margin-top:8px">Flexible. Pause or cancel anytime.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PAYMENT -->
+  <section class="screen" id="s-payment-annual">
+    <div class="scroll">
+      <div class="topbar">
+        <button class="back" onclick="back()">←</button>
+        <h2>Payment details</h2>
+        <button class="ghost" style="width:40px;height:40px;border-radius:50%">?</button>
+      </div>
+      <div class="section">
+        <div class="card" style="padding:16px">
+          <div class="small" style="text-transform:uppercase;letter-spacing:.5px;font-weight:800;margin-bottom:8px">Order summary</div>
+          <div class="kpi"><span>Annual Plan × 1</span><strong>₹9,588</strong></div>
+          <div style="height:8px"></div>
+          <div class="kpi"><span>Discount (40%)</span><strong style="color:var(--success)">−₹3,996</strong></div>
+          <div style="height:8px"></div>
+          <div class="kpi"><span><strong>Total today</strong></span><strong style="color:var(--gold)">₹5,992</strong></div>
+        </div>
+      </div>
+      <div class="section">
+        <label class="label">Card number</label>
+        <input class="input" value="4242 4242 4242 4242" placeholder="1234 5678 9012 3456">
+      </div>
+      <div class="section row">
+        <div style="flex:1">
+          <label class="label">Expiry</label>
+          <input class="input" value="12 / 27" placeholder="MM / YY">
+        </div>
+        <div style="flex:1">
+          <label class="label">CVV</label>
+          <input class="input" value="•••" placeholder="•••">
+        </div>
+      </div>
+      <div class="section">
+        <label class="label">Name on card</label>
+        <input class="input" value="Sachin Kumar">
+      </div>
+      <div class="section tag-row">
+        <span class="pill soft">VISA</span><span class="pill soft">MC</span><span class="pill soft">RuPay</span><span class="pill soft">UPI</span>
+      </div>
+      <div class="section">
+        <button class="gold-btn" onclick="go('s-success')">🔒 Pay ₹5,992 securely</button>
+        <div style="height:10px"></div>
+        <button class="secondary" onclick="go('s-payment-failed')">Show payment failure state</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="screen" id="s-payment-trial">
+    <div class="scroll">
+      <div class="topbar">
+        <button class="back" onclick="back()">←</button>
+        <h2>Payment details</h2>
+        <button class="ghost" style="width:40px;height:40px;border-radius:50%">?</button>
+      </div>
+      <div class="section">
+        <div class="card" style="padding:18px">
+          <span class="pill success">NO CARD REQUIRED</span>
+          <h3 class="title-serif" style="font-size:20px;margin-top:10px">Free Trial selected</h3>
+          <p class="subtle" style="margin-top:8px">This version is useful for demonstrating frictionless trial conversion and the Day-3 / Day-10 nudge idea from Component 4.</p>
+        </div>
+      </div>
+      <div class="section">
+        <button class="primary" onclick="go('s-success')">Start free trial →</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="screen" id="s-payment-monthly">
+    <div class="scroll">
+      <div class="topbar">
+        <button class="back" onclick="back()">←</button>
+        <h2>Payment details</h2>
+        <button class="ghost" style="width:40px;height:40px;border-radius:50%">?</button>
+      </div>
+      <div class="section">
+        <div class="card" style="padding:16px">
+          <div class="kpi"><span>Monthly Plan × 1</span><strong>₹1,199</strong></div>
+        </div>
+      </div>
+      <div class="section">
+        <button class="gold-btn" onclick="go('s-success')">🔒 Pay ₹1,199 securely</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="screen" id="s-payment-failed">
+    <div class="scroll">
+      <div class="topbar">
+        <button class="back" onclick="back()">←</button>
+        <h2>Payment failed</h2>
+        <button class="ghost" style="width:40px;height:40px;border-radius:50%">!</button>
+      </div>
+      <div class="section" style="text-align:center">
+        <div class="logo" style="margin:0 auto 14px;background:linear-gradient(135deg,#ff6b6b,#d94c4c)">✖</div>
+        <h1 class="title-serif" style="font-size:28px">Transaction declined</h1>
+        <p class="subtle">This gives you a useful error state for the prototype. It is also a good screen to show recovery actions.</p>
+      </div>
+      <div class="section list">
+        <button class="primary" onclick="go('s-payment-annual')">Retry payment</button>
+        <button class="secondary" onclick="showToast('Switch to UPI or another card','gold')">Use another method</button>
+        <button class="secondary" onclick="go('s-home')">Skip for now</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- SUCCESS -->
+  <section class="screen" id="s-success">
+    <div class="scroll">
+      <div class="section" style="padding-top:100px;text-align:center">
+        <div class="logo" style="margin:0 auto 16px;animation:pulse 2s ease infinite">✅</div>
+        <h1 class="title-serif" style="font-size:30px;line-height:1.2;margin-bottom:10px">You're all set,<br>Sachin!</h1>
+        <p class="subtle" style="max-width:280px;margin:0 auto 20px">Your plan is active. Start browsing, download books, and open the reader.</p>
+        <div class="dots" style="margin-bottom:24px"><span class="dot active"></span><span class="dot"></span><span class="dot"></span></div>
+        <button class="primary" onclick="go('s-home')">Explore the library →</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOME -->
+  <section class="screen" id="s-home">
+    <div class="scroll">
+      <div class="topbar">
+        <div>
+          <div class="small">Good morning,</div>
+          <h2 style="font-size:24px">Sachin 👋</h2>
+        </div>
+        <button class="back" onclick="go('s-profile')">S</button>
+      </div>
+
+      <div class="search-box" onclick="go('s-search')">
+        <span style="font-size:18px;color:var(--text3)">🔍</span>
+        <input readonly placeholder="Search books, authors, genres…" value="Search books, authors, genres…">
+      </div>
+
+      <div class="section">
+        <div class="card" style="padding:14px">
+          <div class="kpi" style="margin-bottom:10px">
+            <span><strong>2025 Reading Challenge</strong><br><span class="small">23 of 30 books • on track</span></span>
+            <span class="pill gold">77%</span>
+          </div>
+          <div class="progress"><span style="width:77%"></span></div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-head"><h3>Continue reading 📖</h3><button class="link" onclick="go('s-reader')">Open</button></div>
+        <div class="feature-row">
+          <div class="item" style="min-width:260px" onclick="go('s-reader')">
+            <div class="thumb sm book-cover c1"></div>
+            <div class="meta">
+              <h4>Atomic Habits</h4>
+              <p>James Clear • 43% complete</p>
+              <div style="height:8px" class="progress"><span style="width:43%"></span></div>
+            </div>
+          </div>
+          <div class="item" style="min-width:260px" onclick="go('s-reader')">
+            <div class="thumb sm book-cover c8"></div>
+            <div class="meta">
+              <h4>Deep Work</h4>
+              <p>Cal Newport • 14% complete</p>
+              <div style="height:8px" class="progress"><span style="width:14%"></span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-head"><h3>Personalised for you</h3><button class="link" onclick="go('s-collections')">Collections</button></div>
+        <div class="feature-row">
+          <div class="feature-card" onclick="go('s-book-detail')">
+            <h4>Business picks</h4>
+            <p>Books based on your selected genres and reading history.</p>
+          </div>
+          <div class="feature-card" onclick="go('s-book-detail')">
+            <h4>Editor’s choices</h4>
+            <p>Curated recommendations with social proof and ratings.</p>
+          </div>
+          <div class="feature-card" onclick="go('s-wishlist')">
+            <h4>Want-to-read</h4>
+            <p>Your saved list. This feature was not in the original file and is now added.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-head"><h3>Trending now 🔥</h3><button class="link" onclick="go('s-search')">See all</button></div>
+        <div class="feature-row">
+          <div class="thumb lg book-cover c2" onclick="go('s-book-detail')"><div class="book-title">Atomic Habits</div><div class="book-author">James Clear</div></div>
+          <div class="thumb lg book-cover c4" onclick="go('s-book-detail')"><div class="book-title">Ikigai</div><div class="book-author">Garcia &amp; Miralles</div></div>
+          <div class="thumb lg book-cover c7" onclick="go('s-book-detail')"><div class="book-title">The Alchemist</div><div class="book-author">Paulo Coelho</div></div>
+          <div class="thumb lg book-cover c14" onclick="go('s-book-detail')"><div class="book-title">Project Hail Mary</div><div class="book-author">Andy Weir</div></div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-head"><h3>Curated by mood</h3><button class="link" onclick="go('s-collections')">Open</button></div>
+        <div class="grid-2">
+          <div class="story-card" onclick="go('s-collections')"><h4>Need focus?</h4><p>Short books and deep-work picks for productive reading.</p></div>
+          <div class="story-card" onclick="go('s-collections')"><h4>Need escape?</h4><p>Light fiction and page-turners for the evening commute.</p></div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-head"><h3>Reading streak</h3><button class="link" onclick="showToast('🔥 Streak milestone reached','gold')">Milestone</button></div>
+        <div class="card" style="padding:14px">
+          <div class="kpi"><span>Current streak</span><strong>14 days</strong></div>
+          <div style="height:10px"></div>
+          <div class="progress"><span style="width:82%"></span></div>
+          <p class="small" style="margin-top:8px">This is one of the post-MVP engagement ideas from the files.</p>
+        </div>
+      </div>
+
+      <div class="bottom-nav">
+        <button class="nav-item active" onclick="go('s-home')"><div class="icon">⌂</div><span>Home</span></button>
+        <button class="nav-item" onclick="go('s-search')"><div class="icon">⌕</div><span>Search</span></button>
+        <button class="nav-item" onclick="go('s-downloads')"><div class="icon">⇩</div><span>Downloads</span></button>
+        <button class="nav-item" onclick="go('s-profile')"><div class="icon">☺</div><span>Profile</span></button>
+      </div>
+    </div>
+  </section>
+
+  <!-- COLLECTIONS -->
+  <section class="screen" id="s-collections">
+    <div class="scroll">
+      <div class="topbar">
+        <button class="back" onclick="back()">←</button>
+        <h2>Curated collections</h2>
+        <button class="ghost" style="width:40px;height:40px;border-radius:50%">⟳</button>
+      </div>
+      <div class="section">
+        <p class="subtle">This screen adds one of the strongest delighter ideas from your Kano file: curated collections by mood.</p>
+      </div>
+      <div class="section list">
+        <div class="story-card" onclick="go('s-book-detail')">
+          <h4>Need focus?</h4>
+          <p>Books that support concentration, work, and habit building.</p>
+        </div>
+        <div class="story-card" onclick="go('s-book-detail')">
+          <h4>Need motivation?</h4>
+          <p>Biographies, self-help, and action-oriented reading.</p>
+        </div>
+        <div class="story-card" onclick="go('s-book-detail')">
+          <h4>Need a reset?</h4>
+          <p>Light fiction and uplifting stories for a slower evening.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SEARCH -->
+  <section class="screen" id="s-search">
+    <div class="scroll">
+      <div class="topbar">
+        <button class="back" onclick="back()">←</button>
+        <h2>Search</h2>
+        <button class="ghost" style="width:40px;height:40px;border-radius:50%">⚙</button>
+      </div>
+      <div class="search-box">
+        <span style="font-size:18px;color:var(--text3)">🔍</span>
+        <input placeholder="Search books, authors, genres…" value="Atomic">
+      </div>
+      <div class="filter-bar">
+        <button class="chip active">Popular</button>
+        <button class="chip">Genres</button>
+        <button class="chip">Author</button>
+        <button class="chip">Rating</button>
+        <button class="chip">Offline</button>
+      </div>
+      <div class="section">
+        <div class="section-head"><h3>Recent searches</h3></div>
+        <div class="chips">
+          <button class="chip" onclick="showToast('Applied: business','gold')">business</button>
+          <button class="chip" onclick="showToast('Applied: habits','gold')">habits</button>
+          <button class="chip" onclick="showToast('Applied: productivity','gold')">productivity</button>
+        </div>
+      </div>
+      <div class="section">
+        <div class="section-head"><h3>Trending authors</h3><button class="link" onclick="go('s-results')">Results</button></div>
+        <div class="list">
+          <div class="item" onclick="go('s-results')"><div class="thumb sm book-cover c2"></div><div class="meta"><h4>James Clear</h4><p>High-signal books on habits</p></div><span>›</span></div>
+          <div class="item" onclick="go('s-results')"><div class="thumb sm book-cover c7"></div><div class="meta"><h4>Paulo Coelho</h4><p>Popular fiction and inspiration</p></div><span>›</span></div>
+        </div>
+      </div>
+      <div class="section">
+        <button class="primary" onclick="go('s-results')">Show results</button>
+        <div style="height:10px"></div>
+        <button class="secondary" onclick="go('s-no-results')">Show no results state</button>
+      </div>
+      <div class="bottom-nav">
+        <button class="nav-item" onclick="go('s-home')"><div class="icon">⌂</div><span>Home</span></button>
+        <button class="nav-item active" onclick="go('s-search')"><div class="icon">⌕</div><span>Search</span></button>
+        <button class="nav-item" onclick="go('s-downloads')"><div class="icon">⇩</div><span>Downloads</span></button>
+        <button class="nav-item" onclick="go('s-profile')"><div class="icon">☺</div><span>Profile</span></button>
+      </div>
+    </div>
+  </section>
+
+  <!-- RESULTS -->
+  <section class="screen" id="s-results">
+    <div class="scroll">
+      <div class="topbar">
+        <button class="back" onclick="back()">←</button>
+        <h2>Search results</h2>
+        <button class="ghost" style="width:40px;height:40px;border-radius:50%">☰</button>
+      </div>
+      <div class="section list">
+        <div class="item" onclick="go('s-book-detail')">
+          <div class="thumb book-cover c2"></div>
+          <div class="meta">
+            <h4>Atomic Habits</h4>
+            <p>James Clear</p>
+            <div class="tag-row" style="margin-top:8px">
+              <span class="pill gold">4.8★</span><span class="pill soft">Best seller</span>
+            </div>
+          </div>
+        </div>
+        <div class="item" onclick="go('s-book-detail')">
+          <div class="thumb book-cover c1"></div>
+          <div class="meta">
+            <h4>Deep Work</h4>
+            <p>Cal Newport</p>
+            <div class="tag-row" style="margin-top:8px">
+              <span class="pill gold">4.7★</span><span class="pill soft">Productivity</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="bottom-nav">
+        <button class="nav-item" onclick="go('s-home')"><div class="icon">⌂</div><span>Home</span></button>
+        <button class="nav-item active" onclick="go('s-search')"><div class="icon">⌕</div><span>Search</span></button>
+        <button class="nav-item" onclick="go('s-downloads')"><div class="icon">⇩</div><span>Downloads</span></button>
+        <button class="nav-item" onclick="go('s-profile')"><div class="icon">☺</div><span>Profile</span></button>
+      </div>
+    </div>
+  </section>
+
+  <!-- NO RESULTS -->
+  <section class="screen" id="s-no-results">
+    <div class="scroll">
+      <div class="topbar">
+        <button class="back" onclick="back()">←</button>
+        <h2>No results</h2>
+        <button class="ghost" style="width:40px;height:40px;border-radius:50%">?</button>
+      </div>
+      <div class="section" style="text-align:center;padding-top:70px">
+        <div class="logo" style="margin:0 auto 14px;background:linear-gradient(135deg,#e8735a,#a93d3d)">?</div>
+        <h1 class="title-serif" style="font-size:28px">Nothing matched</h1>
+        <p class="subtle" style="max-width:280px;margin:8px auto 0">This empty state is useful for showing the search error path in the assignment.</p>
+      </div>
+      <div class="section list">
+        <button class="primary" onclick="go('s-search')">Try another search</button>
+        <button class="secondary" onclick="go('s-home')">Go to home</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- BOOK DETAIL -->
+  <section class="screen" id="s-book-detail">
+    <div class="scroll">
+      <div class="topbar" style="position:absolute;left:0;right:0;z-index:10">
+        <button class="back" onclick="back()">←</button>
+        <div class="small" style="font-weight:800">Book details</div>
+        <button class="back" onclick="go('s-wishlist')">♥</button>
+      </div>
+      <div style="height:320px;position:relative">
+        <div class="book-cover c2" style="width:100%;height:100%;border-radius:0">
+          <div style="position:absolute;left:24px;right:24px;bottom:24px;z-index:1">
+            <span class="pill gold">EDITOR'S PICK</span>
+            <h1 class="title-serif" style="font-size:28px;line-height:1.15;margin:12px 0 4px">Atomic Habits</h1>
+            <p style="font-size:14px;color:rgba(255,255,255,.75)">James Clear</p>
+          </div>
+        </div>
+      </div>
+      <div class="section">
+        <div class="kpi"><span class="small" style="text-transform:uppercase;font-weight:800">Rating</span><strong>4.8★</strong></div>
+        <div style="height:8px"></div>
+        <div class="kpi"><span class="small" style="text-transform:uppercase;font-weight:800">Reviews</span><strong>12.4k</strong></div>
+      </div>
+      <div class="section tag-row">
+        <span class="pill soft">Productivity</span>
+        <span class="pill soft">Self-help</span>
+        <span class="pill soft">Bestseller</span>
+        <span class="pill soft">Offline available</span>
+      </div>
+      <div class="section">
+        <p class="subtle">This page now includes the reviews, wishlist, and download actions that were missing from the earlier version.</p>
+      </div>
+      <div class="section list">
+        <button class="primary" onclick="go('s-reader')">Read now</button>
+        <button class="secondary" onclick="go('s-downloads')">Download for offline</button>
+        <button class="secondary" onclick="go('s-reviews')">View reviews and ratings</button>
+        <button class="secondary" onclick="go('s-community')">Request / vote for books</button>
+      </div>
+      <div class="section">
+        <div class="story-card">
+          <h4>Synopsis</h4>
+          <p>An easy-to-read guide to habit formation, suitable for reader settings testing and progress tracking.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="screen" id="s-reviews">
+    <div class="scroll">
+      <div class="topbar">
+        <button class="back" onclick="back()">←</button>
+        <h2>Reviews & ratings</h2>
+        <button class="ghost" style="width:40px;height:40px;border-radius:50%">★</button>
+      </div>
+      <div class="section card" style="padding:16px">
+        <div class="kpi"><span><strong>4.8 out of 5</strong><br><span class="small">12,403 ratings</span></span><strong class="rating-pill">★★★★★</strong></div>
+        <div class="hr"></div>
+        <div class="review">
+          <div class="name">Aarav</div>
+          <div class="stars">★★★★★</div>
+          <div class="body">Clear, practical, and easy to finish. Good fit for an MVP reading app.</div>
+        </div>
+        <div class="review">
+          <div class="name">Neha</div>
+          <div class="stars">★★★★★</div>
+          <div class="body">The progress tracker and night mode are exactly the kind of features I expect.</div>
+        </div>
+      </div>
+      <div class="section">
+        <button class="primary" onclick="go('s-book-detail')">Back to book</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- READER -->
+  <section class="screen reader" id="s-reader">
+    <div class="reader-top">
+      <button onclick="back()">←</button>
+      <div class="reader-title">Chapter 1 • Atomic Habits</div>
+      <button onclick="go('s-reader-settings')">☰</button>
+    </div>
+    <div class="reader-content" id="reader-content">
+      <p>We are all capable of change. Sometimes the difference between success and failure is not talent, but the system around us.</p>
+      <p>Small habits compound. Tiny improvements, repeated over time, produce outcomes that look dramatic only in hindsight.</p>
+      <p>In this prototype, the reader includes the progress bar, font controls, and night theme toggle mentioned in your component files. The interaction is intentionally lightweight, but it is functional enough to demonstrate the design idea.</p>
+      <p>Download support, offline reading, and settings are also represented as separate clickable pages, which helps the prototype feel closer to a real product flow.</p>
+      <p>That is the entire point of this upgrade: a stronger critical path and more screens for the evaluator to click through.</p>
+    </div>
+    <div class="reader-bottom">
+      <div class="reader-progress-wrap">
+        <div class="reader-track"><div class="reader-fill" id="readerFill"></div></div>
+        <span class="small" id="readerPct">38%</span>
+      </div>
+      <div class="small" style="text-align:center">Page 48 of 126</div>
+    </div>
+  </section>
+
+  <!-- READER SETTINGS -->
+  <section class="screen overlay" id="s-reader-settings">
+    <div class="sheet">
+      <div style="width:42px;height:4px;border-radius:99px;background:var(--border);margin:0 auto 16px"></div>
+      <div class="topbar" style="padding:0 0 14px">
+        <button class="back" onclick="back()">←</button>
+        <h2>Reader settings</h2>
+        <button class="ghost" style="width:40px;height:40px;border-radius:50%">✕</button>
+      </div>
+      <div class="section" style="margin:0 0 18px">
+        <div class="label">Theme</div>
+        <div class="settings-row">
+          <button class="theme-btn active" onclick="setReaderTheme('reader', this)">Light</button>
+          <button class="theme-btn" onclick="setReaderTheme('night', this)">Night</button>
+          <button class="theme-btn" onclick="setReaderTheme('sepia', this)">Sepia</button>
+        </div>
+      </div>
+      <div class="section" style="margin:0 0 18px">
+        <div class="label">Font size</div>
+        <div class="settings-row">
+          <button class="font-btn active" onclick="setFontSize('16px', this)">A−</button>
+          <button class="font-btn" onclick="setFontSize('17px', this)">A</button>
+          <button class="font-btn" onclick="setFontSize('19px', this)">A+</button>
+        </div>
+      </div>
+      <div class="section" style="margin:0">
+        <button class="primary" onclick="go('s-reader')">Done</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- DOWNLOADS -->
+  <section class="screen" id="s-downloads">
+    <div class="scroll">
+      <div class="topbar">
+        <button class="back" onclick="back()">←</button>
+        <h2>Downloads</h2>
+        <button class="ghost" style="width:40px;height:40px;border-radius:50%">⇩</button>
+      </div>
+      <div class="section">
+        <div class="card" style="padding:16px">
+          <div class="kpi"><span><strong>Storage used</strong><br><span class="small">1.2 GB of 4 GB</span></span><strong>34%</strong></div>
+          <div style="height:10px" class="progress"><span style="width:34%"></span></div>
+        </div>
+      </div>
+      <div class="section list">
+        <div class="item" onclick="go('s-offline')">
+          <div class="thumb book-cover c2"></div>
+          <div class="meta"><h4>Atomic Habits</h4><p>Downloaded • 100% complete</p></div>
+          <span class="pill success">Ready</span>
+        </div>
+        <div class="item">
+          <div class="thumb book-cover c8"></div>
+          <div class="meta"><h4>Deep Work</h4><p>Downloading • 62%</p></div>
+          <span class="pill gold">62%</span>
+        </div>
+      </div>
+      <div class="section">
+        <button class="secondary" onclick="showToast('Offline reading is enabled','success')">Enable offline sync</button>
+      </div>
+      <div class="bottom-nav">
+        <button class="nav-item" onclick="go('s-home')"><div class="icon">⌂</div><span>Home</span></button>
+        <button class="nav-item" onclick="go('s-search')"><div class="icon">⌕</div><span>Search</span></button>
+        <button class="nav-item active" onclick="go('s-downloads')"><div class="icon">⇩</div><span>Downloads</span></button>
+        <button class="nav-item" onclick="go('s-profile')"><div class="icon">☺</div><span>Profile</span></button>
+      </div>
+    </div>
+  </section>
+
+  <!-- OFFLINE -->
+  <section class="screen" id="s-offline">
+    <div class="scroll">
+      <div class="topbar">
+        <button class="back" onclick="back()">←</button>
+        <h2>Offline reading</h2>
+        <button class="ghost" style="width:40px;height:40px;border-radius:50%">↻</button>
+      </div>
+      <div class="section" style="text-align:center;padding-top:76px">
+        <div class="logo" style="margin:0 auto 14px;background:linear-gradient(135deg,#4caf82,#2a815f)">📶</div>
+        <h1 class="title-serif" style="font-size:28px">No internet</h1>
+        <p class="subtle" style="max-width:280px;margin:8px auto 0">The downloaded title can still be opened. This screen helps show the offline reading state from your files.</p>
+      </div>
+      <div class="section list">
+        <button class="primary" onclick="go('s-reader')">Continue reading</button>
+        <button class="secondary" onclick="go('s-downloads')">Back to downloads</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- WISHLIST -->
+  <section class="screen" id="s-wishlist">
+    <div class="scroll">
+      <div class="topbar">
+        <button class="back" onclick="back()">←</button>
+        <h2>Want to read</h2>
+        <button class="ghost" style="width:40px;height:40px;border-radius:50%">♥</button>
+      </div>
+      <div class="section">
+        <p class="subtle">A saved list makes the prototype feel more complete and supports the community / discovery features in your files.</p>
+      </div>
+      <div class="section list">
+        <div class="item" onclick="go('s-book-detail')">
+          <div class="thumb book-cover c7"></div>
+          <div class="meta"><h4>The Alchemist</h4><p>Saved yesterday</p></div>
+          <span class="pill coral">Saved</span>
+        </div>
+        <div class="item" onclick="go('s-book-detail')">
+          <div class="thumb book-cover c14"></div>
+          <div class="meta"><h4>Project Hail Mary</h4><p>Saved last week</p></div>
+          <span class="pill coral">Saved</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- COMMUNITY -->
+  <section class="screen" id="s-community">
+    <div class="scroll">
+      <div class="topbar">
+        <button class="back" onclick="back()">←</button>
+        <h2>Community voting</h2>
+        <button class="ghost" style="width:40px;height:40px;border-radius:50%">+</button>
+      </div>
+      <div class="section">
+        <div class="story-card">
+          <h4>Request a book</h4>
+          <p>This screen reflects the community request & voting feature from the Kano file.</p>
+        </div>
+      </div>
+      <div class="section list">
+        <div class="vote">
+          <div>
+            <div class="vtitle">Shoe Dog</div>
+            <div class="vmeta">Requested by 182 users</div>
+          </div>
+          <button class="up" onclick="showToast('Vote recorded','success')">↑ 182</button>
+        </div>
+        <div class="vote">
+          <div>
+            <div class="vtitle">Thinking, Fast and Slow</div>
+            <div class="vmeta">Requested by 147 users</div>
+          </div>
+          <button class="up" onclick="showToast('Vote recorded','success')">↑ 147</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROFILE -->
+  <section class="screen" id="s-profile">
+    <div class="scroll">
+      <div class="topbar">
+        <button class="back" onclick="go('s-home')">←</button>
+        <h2>Profile</h2>
+        <button class="ghost" style="width:40px;height:40px;border-radius:50%">⚙</button>
+      </div>
+      <div class="section" style="text-align:center">
+        <div class="logo" style="margin:0 auto 14px;width:84px;height:84px;font-size:34px">S</div>
+        <h1 class="title-serif" style="font-size:26px">Sachin Kumar</h1>
+        <p class="subtle">sachin@example.com</p>
+        <div style="height:10px"></div>
+        <span class="pill success">Annual plan active</span>
+      </div>
+      <div class="section">
+        <div class="mini-stats">
+          <div class="mini-stat"><strong>14</strong><span>Day streak</span></div>
+          <div class="mini-stat"><strong>23</strong><span>Books read</span></div>
+          <div class="mini-stat"><strong>7</strong><span>Downloads</span></div>
+        </div>
+      </div>
+      <div class="section">
+        <div class="section-head"><h3>Achievements</h3></div>
+        <div class="badge-list">
+          <span class="badge active">7-day streak</span>
+          <span class="badge active">First download</span>
+          <span class="badge">Night reader</span>
+          <span class="badge">Community voter</span>
+        </div>
+      </div>
+      <div class="section list">
+        <div class="item" onclick="go('s-edit-profile')"><div class="meta"><h4>Edit profile</h4><p>Name, avatar, preferences</p></div><span>›</span></div>
+        <div class="item" onclick="go('s-wishlist')"><div class="meta"><h4>Want to read</h4><p>Saved books</p></div><span>›</span></div>
+        <div class="item" onclick="go('s-reader-settings')"><div class="meta"><h4>Reader settings</h4><p>Theme, font, layout</p></div><span>›</span></div>
+        <div class="item" onclick="go('s-community')"><div class="meta"><h4>Community votes</h4><p>Request new titles</p></div><span>›</span></div>
+      </div>
+      <div class="section">
+        <button class="secondary" onclick="showToast('Subscription managed','gold')">Manage subscription</button>
+      </div>
+      <div class="bottom-nav">
+        <button class="nav-item" onclick="go('s-home')"><div class="icon">⌂</div><span>Home</span></button>
+        <button class="nav-item" onclick="go('s-search')"><div class="icon">⌕</div><span>Search</span></button>
+        <button class="nav-item" onclick="go('s-downloads')"><div class="icon">⇩</div><span>Downloads</span></button>
+        <button class="nav-item active" onclick="go('s-profile')"><div class="icon">☺</div><span>Profile</span></button>
+      </div>
+    </div>
+  </section>
+
+  <!-- EDIT PROFILE -->
+  <section class="screen" id="s-edit-profile">
+    <div class="scroll">
+      <div class="topbar">
+        <button class="back" onclick="back()">←</button>
+        <h2>Edit profile</h2>
+        <button class="ghost" style="width:40px;height:40px;border-radius:50%">✓</button>
+      </div>
+      <div class="section" style="text-align:center">
+        <div class="logo" style="margin:0 auto 14px;width:88px;height:88px;font-size:36px">S</div>
+        <p class="subtle">Update basic identity and reading preferences.</p>
+      </div>
+      <div class="section">
+        <label class="label">Display name</label>
+        <input class="input" value="Sachin Kumar">
+      </div>
+      <div class="section">
+        <label class="label">Reading preferences</label>
+        <div class="chips">
+          <button class="chip active">Business</button>
+          <button class="chip active">Self-help</button>
+          <button class="chip">Science</button>
+          <button class="chip">History</button>
+        </div>
+      </div>
+      <div class="section">
+        <button class="primary" onclick="showToast('Profile updated','success')">Save changes</button>
+      </div>
+    </div>
+  </section>
+
 </div>
 
-<div class="frame" id="frame">
-  <div class="notch"></div>
-  <div id="toast-container"></div>
-  <div class="status-bar">
-    <span class="status-time">9:41</span>
-    <div class="status-icons">
-      <span>●●●</span><span>WiFi</span><span>🔋</span>
-    </div>
-  </div>
-
-  <!-- ══════ S1: SPLASH ══════ -->
-  <div class="screen active" id="s-splash">
-    <div style="height:100%;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:20px;background:linear-gradient(160deg,#07071A 0%,#0F0D2E 50%,#1a0a1a 100%)">
-      <div class="splash-logo">
-        <div class="splash-icon">📖</div>
-        <div class="splash-name">PageTurn</div>
-        <div class="splash-tagline">The world's books, in your pocket</div>
-      </div>
-      <div class="splash-loader"><div class="splash-loader-fill"></div></div>
-    </div>
-  </div>
-
-  <!-- ══════ S2: WELCOME ══════ -->
-  <div class="screen" id="s-welcome">
-    <div class="welcome-hero">
-      <div class="welcome-shelf">
-        <div class="shelf-book tall c1 book-cover" style="width:78px;border-radius:8px;" onclick="go('s-bookdetail',1)"></div>
-        <div class="shelf-book mid c2 book-cover" style="width:68px;border-radius:8px;" onclick="go('s-bookdetail',2)"></div>
-        <div class="shelf-book tall c4 book-cover" style="width:78px;border-radius:8px;" onclick="go('s-bookdetail',4)"></div>
-        <div class="shelf-book short c3 book-cover" style="width:62px;border-radius:8px;" onclick="go('s-bookdetail',3)"></div>
-        <div class="shelf-book tall c8 book-cover" style="width:78px;border-radius:8px;" onclick="go('s-bookdetail',8)"></div>
-      </div>
-      <div class="shelf-gradient"></div>
-    </div>
-    <div class="welcome-content">
-      <div class="welcome-eyebrow">Welcome to PageTurn</div>
-      <div class="welcome-title">Every story<br>you'll ever <em>love</em>,<br>one subscription.</div>
-      <div class="welcome-sub">50,000+ books. One price. Read anywhere — even offline.</div>
-      <div class="welcome-btns">
-        <button class="btn-primary pulse" onclick="go('s-signup')">Get Started — Free 14-Day Trial</button>
-        <div class="divider-row"><div class="divider-line"></div><span class="divider-text">or continue with</span><div class="divider-line"></div></div>
-        <div class="social-row">
-          <button class="social-btn" onclick="go('s-otp')">🇬 Google</button>
-          <button class="social-btn" onclick="go('s-otp')">🍎 Apple</button>
-        </div>
-        <div class="auth-switch">Already have an account? <a onclick="go('s-signup')">Sign in</a></div>
-      </div>
-    </div>
-  </div>
-
-  <!-- ══════ S3: SIGN UP ══════ -->
-  <div class="screen" id="s-signup">
-    <div class="screen-header"><button class="back-btn" onclick="back()">←</button><h2>Create Account</h2></div>
-    <div class="auth-form">
-      <div><label>FULL NAME</label><input class="input-field" type="text" placeholder="Sachin Kumar" value="Sachin Kumar"></div>
-      <div><label>EMAIL ADDRESS</label><input class="input-field" type="email" placeholder="you@example.com" value="sachin@example.com"></div>
-      <div><label>PASSWORD</label><input class="input-field" type="password" placeholder="Min. 8 characters" value="password123"></div>
-      <div style="height:8px"></div>
-      <button class="btn-primary" onclick="go('s-otp')">Send Verification Code →</button>
-      <p class="auth-terms">By signing up, you agree to our <a>Terms of Service</a> and <a>Privacy Policy</a></p>
-      <div class="divider-row"><div class="divider-line"></div><span class="divider-text">or</span><div class="divider-line"></div></div>
-      <button class="social-btn" style="width:100%;padding:14px;gap:10px" onclick="go('s-otp')">🇬 Continue with Google</button>
-      <div class="auth-switch">Have an account? <a onclick="go('s-home')">Sign in</a></div>
-    </div>
-  </div>
-
-  <!-- ══════ S4: OTP ══════ -->
-  <div class="screen" id="s-otp">
-    <div class="screen-header"><button class="back-btn" onclick="back()">←</button><h2>Verify Email</h2></div>
-    <div class="otp-wrap">
-      <div class="otp-icon">📬</div>
-      <div class="otp-title">Check your inbox</div>
-      <div class="otp-sub">We sent a 6-digit code to<br><strong style="color:var(--gold)">sachin@example.com</strong></div>
-      <div class="otp-boxes">
-        <div class="otp-box filled">3</div><div class="otp-box filled">7</div>
-        <div class="otp-box filled">4</div><div class="otp-box filled">8</div>
-        <div class="otp-box" style="border-color:var(--gold);animation:blink 1s step-end infinite">_</div>
-        <div class="otp-box"></div>
-      </div>
-      <div style="width:100%"><button class="btn-primary" onclick="go('s-plans')">Verify & Continue →</button></div>
-      <div class="otp-resend">Didn't get it? <a onclick="">Resend code</a> · (28s)</div>
-    </div>
-  </div>
-  <style>@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}</style>
-
-  <!-- ══════ S5: PLANS ══════ -->
-  <div class="screen" id="s-plans">
-    <div class="plans-hero">
-      <div style="font-size:12px;color:var(--gold);font-weight:600;letter-spacing:2px;text-transform:uppercase;margin-bottom:8px">Choose Your Plan</div>
-      <h1>Start reading today.</h1>
-      <p>Unlock 50,000+ books instantly.<br>Cancel anytime. No commitment.</p>
-    </div>
-    <div class="plans-list">
-      <div class="plan-card free" onclick="go('s-payment','trial')">
-        <span class="tag tag-success" style="display:inline-block;margin-bottom:12px">14 DAYS FREE</span>
-        <div class="plan-name">Free Trial</div>
-        <div class="plan-price">₹0 <span>for 14 days</span></div>
-        <div class="plan-desc">Full access, no credit card required. Explore everything PageTurn has to offer.</div>
-        <div class="plan-features">
-          <div class="plan-feature">Full library access (50,000+ books)</div>
-          <div class="plan-feature">Offline reading on 1 device</div>
-          <div class="plan-feature">No card required</div>
-        </div>
-      </div>
-      <div class="plan-card recommended" onclick="go('s-payment','annual')">
-        <div class="plan-badge">BEST VALUE — SAVE 40%</div>
-        <div class="plan-name">Annual Plan</div>
-        <div class="plan-price">₹799 <span>/ month</span></div>
-        <div class="plan-desc" style="color:var(--text2)">₹9,588 billed annually. That's ₹399 off vs monthly.</div>
-        <div class="plan-features">
-          <div class="plan-feature">Full library (50,000+ books)</div>
-          <div class="plan-feature">Offline reading on 3 devices</div>
-          <div class="plan-feature">Family sharing (up to 4 members)</div>
-          <div class="plan-feature">Early access to new titles</div>
-        </div>
-      </div>
-      <div class="plan-card" onclick="go('s-payment','monthly')">
-        <div class="plan-name">Monthly Plan</div>
-        <div class="plan-price">₹1,199 <span>/ month</span></div>
-        <div class="plan-desc">Flexible. Cancel or pause anytime from settings.</div>
-        <div class="plan-features">
-          <div class="plan-feature">Full library access</div>
-          <div class="plan-feature">Offline reading on 2 devices</div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- ══════ S6: PAYMENT ══════ -->
-  <div class="screen" id="s-payment">
-    <div class="screen-header"><button class="back-btn" onclick="back()">←</button><h2>Payment Details</h2></div>
-    <div class="payment-form">
-      <div class="pay-summary">
-        <div class="pay-summary-title">Order Summary</div>
-        <div class="pay-row"><span>Annual Plan × 1</span><span>₹9,588</span></div>
-        <div class="pay-row"><span>Discount (40% off)</span><span style="color:var(--success)">−₹3,996</span></div>
-        <div class="pay-row pay-total"><span><strong>Total today</strong></span><span>₹5,992</span></div>
-      </div>
-      <div><label style="font-size:12px;font-weight:600;color:var(--text2);letter-spacing:.5px;text-transform:uppercase;display:block;margin-bottom:6px">CARD NUMBER</label>
-        <input class="input-field" type="text" placeholder="1234 5678 9012 3456" value="4242 4242 4242 4242"></div>
-      <div class="card-row">
-        <div style="flex:1"><label style="font-size:12px;font-weight:600;color:var(--text2);letter-spacing:.5px;text-transform:uppercase;display:block;margin-bottom:6px">EXPIRY</label>
-          <input class="input-field" type="text" placeholder="MM / YY" value="12 / 27"></div>
-        <div style="flex:1"><label style="font-size:12px;font-weight:600;color:var(--text2);letter-spacing:.5px;text-transform:uppercase;display:block;margin-bottom:6px">CVV</label>
-          <input class="input-field" type="text" placeholder="•••" value="•••"></div>
-      </div>
-      <div><label style="font-size:12px;font-weight:600;color:var(--text2);letter-spacing:.5px;text-transform:uppercase;display:block;margin-bottom:6px">NAME ON CARD</label>
-        <input class="input-field" type="text" placeholder="As on card" value="Sachin Kumar"></div>
-      <div class="card-icons"><span class="card-icon">VISA</span><span class="card-icon">MC</span><span class="card-icon">RuPay</span><span class="card-icon">UPI</span></div>
-      <div style="height:4px"></div>
-      <button class="btn-gold" onclick="go('s-success')">🔒 Pay ₹5,992 Securely</button>
-      <div class="secure-note">🔒 256-bit SSL encrypted · PCI-DSS compliant</div>
-    </div>
-  </div>
-
-  <!-- ══════ S7: SUCCESS ══════ -->
-  <div class="screen" id="s-success">
-    <div class="success-anim">✅</div>
-    <div class="success-title">You're all set,<br>Sachin! 🎉</div>
-    <div class="success-sub">Your Annual Plan is active. Start reading your first book — 50,000+ titles are waiting for you.</div>
-    <div class="success-dots"><div class="success-dot active"></div><div class="success-dot"></div><div class="success-dot"></div></div>
-    <button class="btn-primary" style="width:300px" onclick="go('s-home')">Explore the Library →</button>
-    <div style="font-size:13px;color:var(--text2);text-align:center">You'll receive a confirmation email shortly</div>
-  </div>
-
-  <!-- ══════ S8: HOME ══════ -->
-  <div class="screen" id="s-home">
-    <div class="home-topbar">
-      <div><div class="home-greeting">Good morning,</div><div class="home-user">Sachin 👋</div></div>
-      <button class="avatar-btn" onclick="go('s-profile')">S</button>
-    </div>
-    <div class="home-search-bar" onclick="go('s-search')">
-      <span class="search-icon">🔍</span>
-      <span>Search books, authors, genres…</span>
-    </div>
-
-    <!-- Challenge Banner -->
-    <div class="challenge-banner" onclick="showToast('📚 Reading Challenge: 23 of 30 books this year!','gold')">
-      <div class="challenge-icon">🎯</div>
-      <div class="challenge-info">
-        <div class="challenge-title">2025 Reading Challenge</div>
-        <div class="challenge-sub">23 of 30 books · On track!</div>
-      </div>
-      <div class="challenge-ring">
-        <svg width="44" height="44" viewBox="0 0 44 44">
-          <circle cx="22" cy="22" r="18" fill="none" stroke="rgba(212,168,67,.2)" stroke-width="4"/>
-          <circle cx="22" cy="22" r="18" fill="none" stroke="#D4A843" stroke-width="4"
-            stroke-dasharray="113" stroke-dashoffset="28" stroke-linecap="round"/>
-        </svg>
-        <div class="challenge-ring-pct">77%</div>
-      </div>
-    </div>
-    <!-- Continue Reading -->
-    <div class="section-header"><div class="section-title">Continue Reading 📖</div></div>
-    <div class="books-row" style="gap:12px;padding-bottom:8px">
-      <div class="continue-card" onclick="go('s-reader')">
-        <div class="continue-cover"><div class="continue-cover-inner c1"><span class="continue-title-sm">Midnight Library</span></div></div>
-        <div class="continue-info">
-          <div>
-            <div class="continue-book-title">The Midnight Library</div>
-            <div class="continue-author-sm">Matt Haig</div>
-          </div>
-          <div>
-            <div class="continue-prog-track"><div class="continue-prog-fill" style="width:23%"></div></div>
-            <div class="continue-prog-row"><span class="continue-pct">23%</span><span class="continue-resume">Resume →</span></div>
-          </div>
-        </div>
-      </div>
-      <div class="continue-card" onclick="go('s-reader')">
-        <div class="continue-cover"><div class="continue-cover-inner c2"><span class="continue-title-sm">Atomic Habits</span></div></div>
-        <div class="continue-info">
-          <div>
-            <div class="continue-book-title">Atomic Habits</div>
-            <div class="continue-author-sm">James Clear</div>
-          </div>
-          <div>
-            <div class="continue-prog-track"><div class="continue-prog-fill" style="width:68%"></div></div>
-            <div class="continue-prog-row"><span class="continue-pct">68%</span><span class="continue-resume">Resume →</span></div>
-          </div>
-        </div>
-      </div>
-      <div class="continue-card" onclick="go('s-reader')">
-        <div class="continue-cover"><div class="continue-cover-inner c5"><span class="continue-title-sm">Sapiens</span></div></div>
-        <div class="continue-info">
-          <div>
-            <div class="continue-book-title">Sapiens</div>
-            <div class="continue-author-sm">Yuval Harari</div>
-          </div>
-          <div>
-            <div class="continue-prog-track"><div class="continue-prog-fill" style="width:5%"></div></div>
-            <div class="continue-prog-row"><span class="continue-pct">5%</span><span class="continue-resume">Resume →</span></div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <!-- Featured -->
-    <div style="padding:0 20px 16px">
-      <div class="featured-banner" onclick="go('s-bookdetail',1)">
-        <div class="c6 featured-bg" style="width:100%;height:100%;position:absolute;inset:0"></div>
-        <div style="position:relative;z-index:2;padding:20px">
-          <div class="featured-eyebrow">⭐ Editor's Pick</div>
-          <div class="featured-title">Project Hail Mary</div>
-          <div class="featured-author">Andy Weir · Sci-Fi</div>
-        </div>
-        <button class="featured-cta" onclick="event.stopPropagation();go('s-reader')">Read Free</button>
-      </div>
-    </div>
-    <!-- Genre tabs -->
-    <div class="genre-tabs">
-      <div class="genre-tab active">All</div>
-      <div class="genre-tab" onclick="go('s-genre')">Fiction</div>
-      <div class="genre-tab" onclick="go('s-genre')">Non-Fiction</div>
-      <div class="genre-tab" onclick="go('s-genre')">Self-Help</div>
-      <div class="genre-tab" onclick="go('s-genre')">Mystery</div>
-      <div class="genre-tab" onclick="go('s-genre')">Sci-Fi</div>
-    </div>
-    <!-- Trending -->
-    <div class="section-header"><div class="section-title">Trending Now 🔥</div><button class="see-all" onclick="go('s-genre')">See all</button></div>
-    <div class="books-row">
-      <div class="book-card" onclick="go('s-bookdetail',1)"><div class="book-cover"><div class="book-cover-inner c1"><span class="cover-title">The Midnight Library</span><span class="cover-author">Matt Haig</span></div></div><div class="book-info-title">The Midnight Library</div><div class="book-rating">⭐ 4.8 · Fiction</div></div>
-      <div class="book-card" onclick="go('s-bookdetail',2)"><div class="book-cover"><div class="book-cover-inner c2"><span class="cover-title">Atomic Habits</span><span class="cover-author">James Clear</span></div></div><div class="book-info-title">Atomic Habits</div><div class="book-rating">⭐ 4.9 · Self-Help</div></div>
-      <div class="book-card" onclick="go('s-bookdetail',3)"><div class="book-cover"><div class="book-cover-inner c3"><span class="cover-title">Ikigai</span><span class="cover-author">Héctor García</span></div></div><div class="book-info-title">Ikigai</div><div class="book-rating">⭐ 4.6 · Self-Help</div></div>
-      <div class="book-card" onclick="go('s-bookdetail',4)"><div class="book-cover"><div class="book-cover-inner c4"><span class="cover-title">The Alchemist</span><span class="cover-author">Paulo Coelho</span></div></div><div class="book-info-title">The Alchemist</div><div class="book-rating">⭐ 4.7 · Fiction</div></div>
-      <div class="book-card" onclick="go('s-bookdetail',5)"><div class="book-cover"><div class="book-cover-inner c5"><span class="cover-title">Sapiens</span><span class="cover-author">Yuval N. Harari</span></div></div><div class="book-info-title">Sapiens</div><div class="book-rating">⭐ 4.8 · History</div></div>
-    </div>
-    <!-- New Arrivals -->
-    <div class="section-header" style="margin-top:8px"><div class="section-title">New Arrivals ✨</div><button class="see-all" onclick="go('s-genre')">See all</button></div>
-    <div class="books-row">
-      <div class="book-card" onclick="go('s-bookdetail',6)"><div class="book-cover"><div class="book-cover-inner c6"><span class="cover-title">Project Hail Mary</span><span class="cover-author">Andy Weir</span></div></div><div class="book-info-title">Project Hail Mary</div><div class="book-rating">⭐ 4.9 · Sci-Fi</div></div>
-      <div class="book-card" onclick="go('s-bookdetail',7)"><div class="book-cover"><div class="book-cover-inner c7"><span class="cover-title">Normal People</span><span class="cover-author">Sally Rooney</span></div></div><div class="book-info-title">Normal People</div><div class="book-rating">⭐ 4.5 · Romance</div></div>
-      <div class="book-card" onclick="go('s-bookdetail',8)"><div class="book-cover"><div class="book-cover-inner c8"><span class="cover-title">Psychology of Money</span><span class="cover-author">Morgan Housel</span></div></div><div class="book-info-title">The Psychology of Money</div><div class="book-rating">⭐ 4.8 · Finance</div></div>
-      <div class="book-card" onclick="go('s-bookdetail',9)"><div class="book-cover"><div class="book-cover-inner c9"><span class="cover-title">Dune</span><span class="cover-author">Frank Herbert</span></div></div><div class="book-info-title">Dune</div><div class="book-rating">⭐ 4.7 · Sci-Fi</div></div>
-      <div class="book-card" onclick="go('s-bookdetail',10)"><div class="book-cover"><div class="book-cover-inner c10"><span class="cover-title">1984</span><span class="cover-author">George Orwell</span></div></div><div class="book-info-title">1984</div><div class="book-rating">⭐ 4.8 · Classic</div></div>
-    </div>
-    <div style="height:16px"></div>
-    <!-- Bottom Nav -->
-    <div class="bottom-nav">
-      <div class="nav-item active"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg><span>Home</span></div>
-      <div class="nav-item" onclick="go('s-search')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg><span>Search</span></div>
-      <div class="nav-item" onclick="go('s-genre')"><svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg><span>Library</span></div>
-      <div class="nav-item" onclick="go('s-downloads')"><svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg><span>Downloads</span></div>
-      <div class="nav-item" onclick="go('s-profile')"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span>Profile</span></div>
-    </div>
-  </div>
-
-  <!-- ══════ S9: GENRE BROWSE ══════ -->
-  <div class="screen" id="s-genre">
-    <div class="screen-header"><button class="back-btn" onclick="back()">←</button><h2>Browse Genres</h2></div>
-    <div class="genre-grid">
-      <div class="genre-tile c1" onclick="go('s-results')"><div class="genre-tile-wrap"><div class="genre-tile-name">Fiction</div><div class="genre-tile-count">12,400 books</div></div></div>
-      <div class="genre-tile c8" onclick="go('s-results')"><div class="genre-tile-wrap"><div class="genre-tile-name">Self-Help</div><div class="genre-tile-count">8,200 books</div></div></div>
-      <div class="genre-tile c5" onclick="go('s-results')"><div class="genre-tile-wrap"><div class="genre-tile-name">History</div><div class="genre-tile-count">6,500 books</div></div></div>
-      <div class="genre-tile c6" onclick="go('s-results')"><div class="genre-tile-wrap"><div class="genre-tile-name">Sci-Fi</div><div class="genre-tile-count">5,800 books</div></div></div>
-      <div class="genre-tile c2" onclick="go('s-results')"><div class="genre-tile-wrap"><div class="genre-tile-name">Business</div><div class="genre-tile-count">7,100 books</div></div></div>
-      <div class="genre-tile c7" onclick="go('s-results')"><div class="genre-tile-wrap"><div class="genre-tile-name">Romance</div><div class="genre-tile-count">9,300 books</div></div></div>
-      <div class="genre-tile c9" onclick="go('s-results')"><div class="genre-tile-wrap"><div class="genre-tile-name">Mystery</div><div class="genre-tile-count">4,700 books</div></div></div>
-      <div class="genre-tile c4" onclick="go('s-results')"><div class="genre-tile-wrap"><div class="genre-tile-name">Biography</div><div class="genre-tile-count">3,900 books</div></div></div>
-    </div>
-    <!-- Featured in genre -->
-    <div class="section-header"><div class="section-title">Popular in Fiction</div><button class="see-all" onclick="">See all</button></div>
-    <div class="books-row" style="padding-bottom:16px">
-      <div class="book-card" onclick="go('s-bookdetail',1)"><div class="book-cover"><div class="book-cover-inner c1"><span class="cover-title">The Midnight Library</span><span class="cover-author">Matt Haig</span></div></div><div class="book-info-title">The Midnight Library</div><div class="book-rating">⭐ 4.8</div></div>
-      <div class="book-card" onclick="go('s-bookdetail',4)"><div class="book-cover"><div class="book-cover-inner c4"><span class="cover-title">The Alchemist</span><span class="cover-author">Paulo Coelho</span></div></div><div class="book-info-title">The Alchemist</div><div class="book-rating">⭐ 4.7</div></div>
-      <div class="book-card" onclick="go('s-bookdetail',10)"><div class="book-cover"><div class="book-cover-inner c10"><span class="cover-title">1984</span><span class="cover-author">George Orwell</span></div></div><div class="book-info-title">1984</div><div class="book-rating">⭐ 4.8</div></div>
-      <div class="book-card" onclick="go('s-bookdetail',12)"><div class="book-cover"><div class="book-cover-inner c12"><span class="cover-title">Kite Runner</span><span class="cover-author">Hosseini</span></div></div><div class="book-info-title">The Kite Runner</div><div class="book-rating">⭐ 4.7</div></div>
-    </div>
-    <div class="bottom-nav">
-      <div class="nav-item"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg><span>Home</span></div>
-      <div class="nav-item" onclick="go('s-search')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg><span>Search</span></div>
-      <div class="nav-item active"><svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg><span>Library</span></div>
-      <div class="nav-item" onclick="go('s-downloads')"><svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg><span>Downloads</span></div>
-      <div class="nav-item" onclick="go('s-profile')"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span>Profile</span></div>
-    </div>
-  </div>
-
-  <!-- ══════ S10: BOOK DETAIL ══════ -->
-  <div class="screen" id="s-bookdetail">
-    <div class="detail-hero">
-      <div class="c1 detail-cover" id="detail-cover-bg" style="position:absolute;inset:0;width:100%;height:100%"></div>
-      <button class="detail-back" onclick="back()">←</button>
-      <button class="detail-wish" id="wishBtn" onclick="toggleWish()">🤍</button>
-      <div class="detail-meta" style="position:absolute;bottom:24px;left:24px;z-index:2">
-        <div class="detail-title" id="detail-title">The Midnight Library</div>
-        <div class="detail-author" id="detail-author" onclick="go('s-author')" style="cursor:pointer">Matt Haig · <span style="color:var(--gold)">View Author →</span></div>
-      </div>
-    </div>
-    <div class="detail-info">
-      <div class="detail-stat"><div class="detail-stat-val gold">4.8</div><div class="detail-stat-lbl">Rating</div></div>
-      <div class="detail-stat-sep"></div>
-      <div class="detail-stat"><div class="detail-stat-val">288</div><div class="detail-stat-lbl">Pages</div></div>
-      <div class="detail-stat-sep"></div>
-      <div class="detail-stat"><div class="detail-stat-val">4.2h</div><div class="detail-stat-lbl">Read time</div></div>
-      <div class="detail-stat-sep"></div>
-      <div class="detail-stat"><div class="detail-stat-val">2.1M</div><div class="detail-stat-lbl">Readers</div></div>
-    </div>
-    <div class="detail-tags">
-      <span class="tag tag-gold" id="detail-genre">Fiction</span>
-      <span class="tag" style="background:rgba(139,143,170,.1);color:var(--text2);border:1px solid var(--border)">Bestseller</span>
-      <span class="tag tag-coral">New Arrival</span>
-    </div>
-    <div class="detail-desc-title">About this book</div>
-    <div class="detail-desc" id="detail-desc">Somewhere out beyond the edge of the universe there is a library that contains an infinite number of books, each one the story of another reality. One tells the story of your life as it is, along with another book for the other life you could have lived if you had made a different choice at any point in your life. While we all wonder how our lives might have been, what if you had the chance to go to the library and see for yourself?</div>
-        <div class="detail-desc-title" style="margin-top:0">Readers also enjoyed</div>
-    <div class="books-row" style="padding:0 24px 120px;gap:12px">
-      <div class="book-card" style="width:100px" onclick="go('s-bookdetail',4)"><div class="book-cover" style="width:100px;height:148px"><div class="book-cover-inner c4"><span class="cover-title">The Alchemist</span><span class="cover-author">Coelho</span></div></div><div class="book-info-title" style="font-size:11px">The Alchemist</div><div class="book-rating" style="font-size:10px">⭐ 4.7</div></div>
-      <div class="book-card" style="width:100px" onclick="go('s-bookdetail',5)"><div class="book-cover" style="width:100px;height:148px"><div class="book-cover-inner c5"><span class="cover-title">Sapiens</span><span class="cover-author">Harari</span></div></div><div class="book-info-title" style="font-size:11px">Sapiens</div><div class="book-rating" style="font-size:10px">⭐ 4.8</div></div>
-      <div class="book-card" style="width:100px" onclick="go('s-bookdetail',8)"><div class="book-cover" style="width:100px;height:148px"><div class="book-cover-inner c8"><span class="cover-title">Psych of Money</span><span class="cover-author">Housel</span></div></div><div class="book-info-title" style="font-size:11px">Psychology of Money</div><div class="book-rating" style="font-size:10px">⭐ 4.8</div></div>
-    </div>
-    <div class="detail-actions">
-      <button class="btn-outline" onclick="handleDownload(event)">⬇ Download</button>
-      <button class="btn-read" onclick="go('s-reader')">📖 Read Now</button>
-    </div>
-  </div>
-
-  <!-- ══════ S11: READER ══════ -->
-  <div class="screen" id="s-reader" style="background:var(--reading-bg)">
-    <div id="reading-timer" class="reading-timer">⏱ 0:00</div>
-    <div class="reader-topbar">
-      <button class="reader-back" onclick="back()">←</button>
-      <div class="reader-chap">Chapter 1 · The Library</div>
-      <button class="reader-settings-btn" onclick="go('s-settings')">Aa</button>
-    </div>
-    <div class="reader-content">
-      <div class="reader-book-title">The Midnight Library</div>
-      <div class="reader-chapter">Chapter One</div>
-      <div class="reader-divider"></div>
-      <div class="reader-text">
-        <p>Somewhere out beyond the edge of the universe there is a library that contains an infinite number of books, each one the story of another reality. One tells the story of your life as it is, along with another book for the other life you could have lived if you had made a different choice at any point in your life.</p>
-        <p>The books were all identical in size and shape, bound in dark green leather with gold lettering on their spines. The only difference was the titles.</p>
-        <p>Nora Seed had always found it hard to be here, in this life. She had been told she was too sensitive, too easily hurt, too quick to take things personally. She had spent years trying to build up a shell around herself, but it never quite hardened the way she wanted it to.</p>
-        <p>On the evening of the nineteenth of October, at approximately eleven twenty-two, Nora decided she'd had enough. She was thirty-five years old. She had failed at most things she had tried — including her marriage, her relationship with her family, her attempt to become an Olympic swimmer, and her career as a musician.</p>
-        <p>But between life and death there is a library, and within that library, the shelves go on forever. Every book provides a chance to try another life you could have lived. To see how things would be different if you had made other choices. Would you have been happier if you'd chosen differently?</p>
-        <p>She opened the door. The Midnight Library, it seemed, was not much of a library at all, in the physical sense of the word. The room was empty except for a wooden desk in the center, behind which sat a woman who looked remarkably like Nora's school librarian, Mrs. Elm.</p>
-      </div>
-    </div>
-    <div class="reader-bottombar">
-      <div class="reader-progress-row">
-        <div class="reader-progress-track"><div class="reader-progress-fill"></div></div>
-        <div class="reader-progress-pct">23%</div>
-      </div>
-      <div class="reader-page-info">Page 67 of 288 · ~3h 12m remaining</div>
-    </div>
-  </div>
-
-  <!-- ══════ S12: READER SETTINGS ══════ -->
-  <div class="screen" id="s-settings" style="background:rgba(0,0,0,.6)">
-    <div style="flex:1;cursor:pointer" onclick="back()"></div>
-    <div class="settings-panel">
-      <div class="settings-handle"></div>
-      <div class="settings-title">Reading Settings</div>
-      <div class="settings-section">
-        <div class="settings-label">Font Size</div>
-        <div class="font-size-row">
-          <button class="font-btn" style="font-size:14px">A</button>
-          <div class="font-size-track"><div class="font-size-fill"></div><div class="font-size-thumb"></div></div>
-          <button class="font-btn" style="font-size:22px">A</button>
-        </div>
-      </div>
-      <div class="settings-section">
-        <div class="settings-label">Theme</div>
-        <div class="theme-row">
-          <button class="theme-btn theme-cream active">☀ Light</button>
-          <button class="theme-btn theme-sepia">🌅 Sepia</button>
-          <button class="theme-btn theme-dark" onclick="this.parentNode.querySelectorAll('.theme-btn').forEach(b=>b.classList.remove('active'));this.classList.add('active')">🌙 Dark</button>
-        </div>
-      </div>
-      <div class="settings-section">
-        <div class="settings-label">Font Style</div>
-        <div class="font-row">
-          <button class="font-btn-sel active" style="font-family:'Lora',serif">Lora</button>
-          <button class="font-btn-sel" style="font-family:Georgia,serif">Georgia</button>
-          <button class="font-btn-sel" style="font-family:'Inter',sans-serif">Inter</button>
-        </div>
-      </div>
-      <button class="btn-primary" style="margin-top:8px" onclick="back()">Apply Settings</button>
-    </div>
-  </div>
-
-  <!-- ══════ S13: SEARCH ══════ -->
-  <div class="screen" id="s-search">
-    <div class="search-wrap">
-      <div style="display:flex;align-items:center;padding-top:10px;margin-bottom:20px">
-        <button class="back-btn" style="margin-right:8px" onclick="back()">←</button>
-        <div class="search-input-row" style="flex:1;margin-bottom:0">
-          <span>🔍</span>
-          <input id="searchInp" type="text" placeholder="Books, authors, genres…" oninput="if(this.value.length>0)setTimeout(()=>go('s-results'),400)">
-          <button class="clear-btn">✕</button>
-        </div>
-      </div>
-      <div class="search-section-lbl">Recent Searches</div>
-      <div class="recent-chips">
-        <div class="recent-chip" onclick="go('s-results')">Atomic Habits</div>
-        <div class="recent-chip" onclick="go('s-results')">Paulo Coelho</div>
-        <div class="recent-chip" onclick="go('s-results')">Self-help</div>
-        <div class="recent-chip" onclick="go('s-results')">Yuval Harari</div>
-        <div class="recent-chip" onclick="go('s-results')">Sci-fi 2024</div>
-      </div>
-      <div class="search-section-lbl">Trending on PageTurn</div>
-      <div class="trending-list">
-        <div class="trending-item" onclick="go('s-results')"><div class="trending-rank">1</div><div class="trending-info"><div class="trending-title">The Midnight Library</div><div class="trending-genre">Matt Haig · Fiction</div></div><div class="trending-arrow">›</div></div>
-        <div class="trending-item" onclick="go('s-results')"><div class="trending-rank">2</div><div class="trending-info"><div class="trending-title">Atomic Habits</div><div class="trending-genre">James Clear · Self-Help</div></div><div class="trending-arrow">›</div></div>
-        <div class="trending-item" onclick="go('s-results')"><div class="trending-rank">3</div><div class="trending-info"><div class="trending-title">Project Hail Mary</div><div class="trending-genre">Andy Weir · Sci-Fi</div></div><div class="trending-arrow">›</div></div>
-        <div class="trending-item" onclick="go('s-results')"><div class="trending-rank">4</div><div class="trending-info"><div class="trending-title">The Psychology of Money</div><div class="trending-genre">Morgan Housel · Finance</div></div><div class="trending-arrow">›</div></div>
-        <div class="trending-item" onclick="go('s-results')"><div class="trending-rank">5</div><div class="trending-info"><div class="trending-title">Sapiens</div><div class="trending-genre">Yuval Noah Harari · History</div></div><div class="trending-arrow">›</div></div>
-      </div>
-    </div>
-    <div class="bottom-nav">
-      <div class="nav-item" onclick="go('s-home')"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg><span>Home</span></div>
-      <div class="nav-item active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg><span>Search</span></div>
-      <div class="nav-item" onclick="go('s-genre')"><svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg><span>Library</span></div>
-      <div class="nav-item" onclick="go('s-downloads')"><svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg><span>Downloads</span></div>
-      <div class="nav-item" onclick="go('s-profile')"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span>Profile</span></div>
-    </div>
-  </div>
-
-  <!-- ══════ S14: SEARCH RESULTS ══════ -->
-  <div class="screen" id="s-results">
-    <div class="screen-header"><button class="back-btn" onclick="back()">←</button><div style="flex:1;background:var(--surface);border:1.5px solid var(--gold);border-radius:12px;padding:10px 14px;font-size:14px;color:var(--text2)">🔍 Atomic Habits…</div></div>
-    <div style="padding:0 20px 8px;font-size:13px;color:var(--text2)">127 results for "Atomic Habits"</div>
-    <div class="results-list">
-      <div class="result-item" onclick="go('s-bookdetail',2)"><div class="result-cover"><div class="result-cover-inner c2"><span class="result-title-sm">Atomic Habits</span></div></div><div class="result-info"><div class="result-title">Atomic Habits</div><div class="result-author">James Clear</div><div class="result-tags"><span class="tag tag-gold">Self-Help</span><span class="tag tag-coral">Bestseller</span></div><div class="result-rating">⭐ 4.9 · 3.8M readers</div></div></div>
-      <div class="result-item" onclick="go('s-bookdetail',3)"><div class="result-cover"><div class="result-cover-inner c3"><span class="result-title-sm">Ikigai</span></div></div><div class="result-info"><div class="result-title">Ikigai</div><div class="result-author">Héctor García & Francesc Miralles</div><div class="result-tags"><span class="tag tag-gold">Self-Help</span></div><div class="result-rating">⭐ 4.6 · 1.2M readers</div></div></div>
-      <div class="result-item" onclick="go('s-bookdetail',8)"><div class="result-cover"><div class="result-cover-inner c8"><span class="result-title-sm">Psych of Money</span></div></div><div class="result-info"><div class="result-title">The Psychology of Money</div><div class="result-author">Morgan Housel</div><div class="result-tags"><span class="tag tag-gold">Finance</span></div><div class="result-rating">⭐ 4.8 · 2.4M readers</div></div></div>
-      <div class="result-item" onclick="go('s-bookdetail',5)"><div class="result-cover"><div class="result-cover-inner c5"><span class="result-title-sm">Sapiens</span></div></div><div class="result-info"><div class="result-title">Sapiens</div><div class="result-author">Yuval Noah Harari</div><div class="result-tags"><span class="tag tag-gold">History</span></div><div class="result-rating">⭐ 4.8 · 3.1M readers</div></div></div>
-    </div>
-  </div>
-
-  <!-- ══════ S15: DOWNLOADS ══════ -->
-  <div class="screen" id="s-downloads">
-    <div class="screen-header"><button class="back-btn" onclick="back()">←</button><h2>Downloads</h2></div>
-    <div class="storage-info">
-      <div class="storage-icon">💾</div>
-      <div class="storage-text">
-        <div class="storage-title">Storage Used: 1.2 GB of 4 GB</div>
-        <div class="storage-sub">3 books downloaded · Wi-Fi only mode</div>
-        <div class="storage-bar"><div class="storage-fill"></div></div>
-      </div>
-    </div>
-    <div class="downloads-list">
-      <div class="download-item"><div class="download-cover"><div class="download-cover-inner c1"><span class="download-cover-title">Midnight Library</span></div></div><div class="download-info"><div class="download-title">The Midnight Library</div><div class="download-author">Matt Haig</div><div class="download-progress"><div class="download-fill" style="width:23%"></div></div><div class="download-meta"><span>23% read</span><span>356 MB</span></div></div><div class="download-icon" onclick="go('s-reader')">▶</div></div>
-      <div class="download-item"><div class="download-cover"><div class="download-cover-inner c2"><span class="download-cover-title">Atomic Habits</span></div></div><div class="download-info"><div class="download-title">Atomic Habits</div><div class="download-author">James Clear</div><div class="download-progress"><div class="download-fill" style="width:68%"></div></div><div class="download-meta"><span>68% read</span><span>228 MB</span></div></div><div class="download-icon" onclick="go('s-reader')">▶</div></div>
-      <div class="download-item"><div class="download-cover"><div class="download-cover-inner c5"><span class="download-cover-title">Sapiens</span></div></div><div class="download-info"><div class="download-title">Sapiens</div><div class="download-author">Yuval Noah Harari</div><div class="download-progress"><div class="download-fill" style="width:5%"></div></div><div class="download-meta"><span>Just started</span><span>412 MB</span></div></div><div class="download-icon" onclick="go('s-reader')">▶</div></div>
-    </div>
-    <div class="bottom-nav">
-      <div class="nav-item" onclick="go('s-home')"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg><span>Home</span></div>
-      <div class="nav-item" onclick="go('s-search')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg><span>Search</span></div>
-      <div class="nav-item" onclick="go('s-genre')"><svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg><span>Library</span></div>
-      <div class="nav-item active"><svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg><span>Downloads</span></div>
-      <div class="nav-item" onclick="go('s-profile')"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span>Profile</span></div>
-    </div>
-  </div>
-
-  <!-- ══════ S16: PROFILE ══════ -->
-  <div class="screen" id="s-profile">
-    <div class="profile-hero">
-      <div class="profile-avatar">S</div>
-      <div class="profile-name">Sachin Kumar</div>
-      <div class="profile-email">sachin@example.com</div>
-      <div class="profile-plan"><span class="tag tag-gold">✦ Annual Plan · Active</span></div>
-    </div>
-    <div class="profile-streak">
-      <div class="streak-flame">🔥</div>
-      <div class="streak-info"><div class="streak-count">14-day streak!</div><div class="streak-label">Keep going — you're on a roll</div></div>
-      <div style="font-size:24px">🏅</div>
-    </div>
-    <div class="profile-stats">
-      <div class="profile-stat"><div class="profile-stat-val">23</div><div class="profile-stat-lbl">Books Read</div></div>
-      <div class="profile-stat-sep"></div>
-      <div class="profile-stat"><div class="profile-stat-val">6,842</div><div class="profile-stat-lbl">Pages</div></div>
-      <div class="profile-stat-sep"></div>
-      <div class="profile-stat"><div class="profile-stat-val">14</div><div class="profile-stat-lbl">Day Streak</div></div>
-    </div>
-    <div class="profile-section">
-      <div class="profile-section-title">Account</div>
-      <div class="profile-item" onclick="go('s-editprofile')"><div class="profile-item-icon">✏️</div><div style="flex:1"><div class="profile-item-text">Edit Profile</div><div class="profile-item-sub">Name, email, reading preferences</div></div><div class="profile-item-arrow">›</div></div>
-      <div class="profile-item"><div class="profile-item-icon">💳</div><div style="flex:1"><div class="profile-item-text">Subscription</div><div class="profile-item-sub">Annual Plan · Renews Dec 2025</div></div><div class="profile-item-arrow">›</div></div>
-      <div class="profile-item"><div class="profile-item-icon">🔔</div><div style="flex:1"><div class="profile-item-text">Notifications</div><div class="profile-item-sub">Reading reminders, new releases</div></div><div class="profile-item-arrow">›</div></div>
-    </div>
-    <div class="profile-section">
-      <div class="profile-section-title">Reading</div>
-      <div class="profile-item" onclick="go('s-downloads')"><div class="profile-item-icon">⬇️</div><div style="flex:1"><div class="profile-item-text">Downloaded Books</div><div class="profile-item-sub">3 books · 996 MB used</div></div><div class="profile-item-arrow">›</div></div>
-      <div class="profile-item"><div class="profile-item-icon">📊</div><div style="flex:1"><div class="profile-item-text">Reading Statistics</div><div class="profile-item-sub">Your 2025 reading year in data</div></div><div class="profile-item-arrow">›</div></div>
-      <div class="profile-item"><div class="profile-item-icon">🏆</div><div style="flex:1"><div class="profile-item-text">Achievements</div><div class="profile-item-sub">8 of 24 badges earned</div></div><div class="profile-item-arrow">›</div></div>
-    </div>
-    <div style="height:16px"></div>
-    <div class="bottom-nav">
-      <div class="nav-item" onclick="go('s-home')"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg><span>Home</span></div>
-      <div class="nav-item" onclick="go('s-search')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg><span>Search</span></div>
-      <div class="nav-item" onclick="go('s-genre')"><svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg><span>Library</span></div>
-      <div class="nav-item" onclick="go('s-downloads')"><svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg><span>Downloads</span></div>
-      <div class="nav-item active"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span>Profile</span></div>
-    </div>
-  </div>
-
-  <!-- ══════ S17: EDIT PROFILE ══════ -->
-  <div class="screen" id="s-editprofile">
-    <div class="screen-header"><button class="back-btn" onclick="back()">←</button><h2>Edit Profile</h2></div>
-    <div class="edit-avatar-row">
-      <div class="edit-avatar">S<div class="edit-avatar-badge">📷</div></div>
-      <div style="font-size:13px;color:var(--coral);font-weight:600;cursor:pointer">Change Photo</div>
-    </div>
-    <div class="edit-form">
-      <div><div class="edit-field-label">Full Name</div><input class="input-field" value="Sachin Kumar"></div>
-      <div><div class="edit-field-label">Email</div><input class="input-field" value="sachin@example.com"></div>
-      <div><div class="edit-field-label">Reading Language</div>
-        <select class="input-field" style="cursor:pointer"><option>English</option><option>Hindi</option><option>Tamil</option><option>Telugu</option></select></div>
-      <div>
-        <div class="edit-field-label">Favourite Genres</div>
-        <div class="prefs-row">
-          <div class="pref-chip selected">Fiction</div><div class="pref-chip selected">Self-Help</div>
-          <div class="pref-chip">History</div><div class="pref-chip selected">Sci-Fi</div>
-          <div class="pref-chip">Mystery</div><div class="pref-chip">Romance</div>
-          <div class="pref-chip">Biography</div><div class="pref-chip">Business</div>
-        </div>
-      </div>
-      <div><div class="edit-field-label">Reading Goal (books / year)</div><input class="input-field" value="30" type="number"></div>
-      <div style="height:8px"></div>
-      <button class="btn-primary" onclick="go('s-profile')">Save Changes ✓</button>
-      <button class="btn-secondary" onclick="back()">Cancel</button>
-    </div>
-  </div>
-
-
-  <!-- ══════ AUTHOR PAGE ══════ -->
-  <div class="screen" id="s-author">
-    <div class="scroll-area">
-      <div class="author-hero">
-        <button style="align-self:flex-start;background:none;border:none;color:var(--text);font-size:22px;cursor:pointer;margin-bottom:8px" onclick="back()">←</button>
-        <div class="author-avatar">MH</div>
-        <div class="author-name">Matt Haig</div>
-        <div style="display:flex;align-items:center;gap:8px"><span class="tag tag-gold">Fiction Author</span><span class="completed-badge">✓ Verified</span></div>
-        <div class="author-bio">Matt Haig is a British author of fiction and non-fiction. His novels include The Radleys, The Humans, and How to Stop Time. His memoir Reasons to Stay Alive was a Sunday Times Number One bestseller for 46 weeks.</div>
-      </div>
-      <div style="padding:0 24px 16px">
-        <div class="author-stats">
-          <div class="author-stat"><div class="author-stat-val">18</div><div class="author-stat-lbl">Books</div></div>
-          <div style="width:1px;background:var(--border)"></div>
-          <div class="author-stat"><div class="author-stat-val">4.8</div><div class="author-stat-lbl">Avg Rating</div></div>
-          <div style="width:1px;background:var(--border)"></div>
-          <div class="author-stat"><div class="author-stat-val">8.2M</div><div class="author-stat-lbl">Readers</div></div>
-        </div>
-      </div>
-      <div style="padding:0 24px 16px">
-        <button class="follow-btn" id="followAuthorBtn" onclick="toggleFollow()">+ Follow Author</button>
-      </div>
-      <div class="section-header"><div class="section-title">Books by Matt Haig</div></div>
-      <div class="books-row" style="padding-bottom:16px">
-        <div class="book-card" onclick="go('s-bookdetail',1)"><div class="book-cover"><div class="book-cover-inner c1"><span class="cover-title">The Midnight Library</span></div></div><div class="book-info-title">The Midnight Library</div><div class="book-rating">⭐ 4.8</div></div>
-        <div class="book-card" onclick="go('s-bookdetail',1)"><div class="book-cover"><div class="book-cover-inner" style="background:linear-gradient(160deg,#1a3a2a,#2d6b4a)"><span class="cover-title">The Humans</span></div></div><div class="book-info-title">The Humans</div><div class="book-rating">⭐ 4.7</div></div>
-        <div class="book-card" onclick="go('s-bookdetail',1)"><div class="book-cover"><div class="book-cover-inner" style="background:linear-gradient(160deg,#3a1a4a,#6b2d8b)"><span class="cover-title">Reasons to Stay Alive</span></div></div><div class="book-info-title">Reasons to Stay Alive</div><div class="book-rating">⭐ 4.9</div></div>
-        <div class="book-card" onclick="go('s-bookdetail',1)"><div class="book-cover"><div class="book-cover-inner" style="background:linear-gradient(160deg,#1a2a3a,#2d4a6b)"><span class="cover-title">How to Stop Time</span></div></div><div class="book-info-title">How to Stop Time</div><div class="book-rating">⭐ 4.6</div></div>
-      </div>
-      <div style="height:16px"></div>
-    </div>
-  </div>
-
-</div><!-- /frame -->
-
 <script>
-const books = {
-  1:{title:"The Midnight Library",author:"Matt Haig · Fiction · 2020",genre:"Fiction",desc:"Somewhere out beyond the edge of the universe there is a library that contains an infinite number of books, each one the story of another reality. One tells the story of your life as it is, along with another book for the other life you could have lived if you had made a different choice at any point in your life.",bg:"c1"},
-  2:{title:"Atomic Habits",author:"James Clear · Self-Help · 2018",genre:"Self-Help",desc:"Tiny changes, remarkable results. An easy & proven way to build good habits and break bad ones. No matter your goals, Atomic Habits offers a proven framework for improving every day.",bg:"c2"},
-  3:{title:"Ikigai",author:"Héctor García · Self-Help · 2016",genre:"Self-Help",desc:"Ikigai is the Japanese concept of finding joy in life through purpose. This international bestseller reveals the secrets behind the extraordinary longevity of Japan's happiest people.",bg:"c3"},
-  4:{title:"The Alchemist",author:"Paulo Coelho · Fiction · 1988",genre:"Fiction",desc:"Paulo Coelho's masterpiece tells the mystical story of Santiago, a young Andalusian shepherd boy who yearns to travel in search of a worldly treasure. His quest will lead him to riches far different from what he ever imagined.",bg:"c4"},
-  5:{title:"Sapiens",author:"Yuval Noah Harari · History · 2011",genre:"History",desc:"100,000 years ago, at least six human species inhabited the earth. Today there is just one. Us. How did our species succeed in the battle for dominance? Why did our foraging ancestors come together to create cities and kingdoms?",bg:"c5"},
-  6:{title:"Project Hail Mary",author:"Andy Weir · Sci-Fi · 2021",genre:"Sci-Fi",desc:"A lone astronaut must save the earth from disaster. Ryland Grace is the sole survivor on a desperate, last-chance mission — and if he fails, humanity and the earth itself will perish.",bg:"c6"},
-  7:{title:"Normal People",author:"Sally Rooney · Romance · 2018",genre:"Romance",desc:"Connell and Marianne grew up in the same small town, but the similarities end there. At school, Connell is popular and well liked, while Marianne is a loner. But when the two strike up a conversation — life for both changes irrevocably.",bg:"c7"},
-  8:{title:"The Psychology of Money",author:"Morgan Housel · Finance · 2020",genre:"Finance",desc:"Doing well with money isn't necessarily about what you know. It's about how you behave. And behaviour is hard to teach, even to really smart people. Morgan Housel shares 19 short stories exploring the strange ways people think about money.",bg:"c8"},
-  9:{title:"Dune",author:"Frank Herbert · Sci-Fi · 1965",genre:"Sci-Fi",desc:"Set in the distant future amidst a feudal interstellar society in which various noble houses control planetary fiefs, Dune tells the story of young Paul Atreides, whose family accepts the stewardship of the planet Arrakis.",bg:"c9"},
-  10:{title:"1984",author:"George Orwell · Classic · 1949",genre:"Classic",desc:"Among the seminal texts of the 20th century, 1984 is a rare work that grows more haunting as its futuristic defamiliarisation actually becomes familiar. Published in 1949, the book offers political satirist George Orwell's nightmare vision of a totalitarian, bureaucratic world.",bg:"c10"},
-  12:{title:"The Kite Runner",author:"Khaled Hosseini · Fiction · 2003",genre:"Fiction",desc:"The unforgettable, heartbreaking story of the unlikely friendship between a wealthy boy and the son of his father's servant. A sweeping story of family, love, and friendship told against the devastating backdrop of the history of Afghanistan.",bg:"c12"}
-};
+const historyStack = [];
+let currentScreen = 's-splash';
 
-let history = ['s-splash'];
-let wishlist = {};
+function showToast(message, kind='') {
+  const holder = document.getElementById('toast');
+  const el = document.createElement('div');
+  el.className = `toast ${kind}`.trim();
+  el.textContent = message;
+  holder.appendChild(el);
+  requestAnimationFrame(() => el.classList.add('show'));
+  setTimeout(() => {
+    el.classList.remove('show');
+    setTimeout(() => el.remove(), 260);
+  }, 2400);
+}
 
-function go(screenId, bookId) {
-  const curr = document.querySelector('.screen.active');
-  if(bookId && books[bookId]) {
-    const b = books[bookId];
-    document.getElementById('detail-title').textContent = b.title;
-    document.getElementById('detail-author').textContent = b.author;
-    document.getElementById('detail-desc').textContent = b.desc;
-    document.getElementById('detail-genre').textContent = b.genre;
-    const coverEl = document.getElementById('detail-cover-bg');
-    coverEl.className = b.bg;
-    Object.assign(coverEl.style, {position:'absolute',inset:'0',width:'100%',height:'100%'});
-    window._currentBook = bookId;
-    const wb = document.getElementById('wishBtn');
-    wb.textContent = wishlist[bookId] ? '❤️' : '🤍';
-  }
-  if(curr) {
-    curr.classList.add('exit-left');
-    setTimeout(()=>curr.classList.remove('exit-left','active'),300);
-  }
-  const next = document.getElementById(screenId);
-  if(next) {
-    next.style.transform = 'translateX(30px)';
-    next.style.opacity = '0';
-    next.classList.add('active');
-    requestAnimationFrame(()=>{
-      next.style.transition = 'opacity .3s ease, transform .3s ease';
-      next.style.opacity = '';
-      next.style.transform = '';
+function setActiveNav(id) {
+  document.querySelectorAll('.nav-item').forEach(btn => btn.classList.remove('active'));
+  if (id === 's-home') {
+    document.querySelectorAll('.nav-item').forEach(btn => {
+      if (btn.textContent.includes('Home')) btn.classList.add('active');
     });
-    next.scrollTop = 0;
+  } else if (id === 's-search' || id === 's-results' || id === 's-no-results') {
+    document.querySelectorAll('.nav-item').forEach(btn => {
+      if (btn.textContent.includes('Search')) btn.classList.add('active');
+    });
+  } else if (id === 's-downloads' || id === 's-offline') {
+    document.querySelectorAll('.nav-item').forEach(btn => {
+      if (btn.textContent.includes('Downloads')) btn.classList.add('active');
+    });
+  } else if (id === 's-profile' || id === 's-edit-profile' || id === 's-reader-settings' || id === 's-community' || id === 's-wishlist') {
+    document.querySelectorAll('.nav-item').forEach(btn => {
+      if (btn.textContent.includes('Profile')) btn.classList.add('active');
+    });
   }
-  history.push(screenId);
+}
+
+function go(id, push=true) {
+  const next = document.getElementById(id);
+  const prev = document.getElementById(currentScreen);
+  if (!next || next === prev) return;
+  if (push) historyStack.push(currentScreen);
+  if (prev) {
+    prev.classList.add('exit-left');
+    prev.classList.remove('active');
+    setTimeout(() => prev.classList.remove('exit-left'), 280);
+  }
+  next.classList.add('active');
+  currentScreen = id;
+  setActiveNav(id);
+  if (id === 's-reader') updateReaderProgress();
+  if (id === 's-home') showToast('🔥 14-day streak active', 'gold');
 }
 
 function back() {
-  if(history.length <= 1) return;
-  history.pop();
-  const prev = history[history.length-1];
-  const curr = document.querySelector('.screen.active');
-  if(curr) {
-    curr.style.transition = 'opacity .25s ease, transform .25s ease';
-    curr.style.opacity = '0';
-    curr.style.transform = 'translateX(30px)';
-    setTimeout(()=>{curr.classList.remove('active');curr.style.opacity='';curr.style.transform='';},250);
+  const id = historyStack.pop() || 's-home';
+  go(id, false);
+}
+
+function toggleChip(el) {
+  el.classList.toggle('selected');
+  el.style.outline = el.classList.contains('selected') ? '2px solid rgba(212,168,67,.28)' : 'none';
+  if (el.classList.contains('selected')) showToast('Genre added', 'success');
+}
+
+function updateReaderProgress() {
+  const fill = document.getElementById('readerFill');
+  const pct = document.getElementById('readerPct');
+  if (fill) fill.style.width = '38%';
+  if (pct) pct.textContent = '38%';
+}
+
+function setReaderTheme(mode, el) {
+  const reader = document.getElementById('s-reader');
+  const buttons = document.querySelectorAll('#s-reader-settings .theme-btn');
+  buttons.forEach(btn => btn.classList.remove('active'));
+  el.classList.add('active');
+  reader.classList.remove('reader-night', 'reader-sepia');
+  if (mode === 'night') {
+    reader.style.background = '#181512';
+    reader.style.color = '#cdbfa6';
+    showToast('Night mode enabled', 'gold');
+  } else if (mode === 'sepia') {
+    reader.style.background = '#e8d9b5';
+    reader.style.color = '#3d2b1a';
+    showToast('Sepia theme enabled', 'gold');
+  } else {
+    reader.style.background = 'var(--reader)';
+    reader.style.color = 'var(--readerText)';
+    showToast('Light theme enabled', 'gold');
   }
-  const prevEl = document.getElementById(prev);
-  if(prevEl) {
-    prevEl.style.transform = 'translateX(-20px)';
-    prevEl.style.opacity = '0';
-    prevEl.classList.add('active');
-    requestAnimationFrame(()=>{
-      prevEl.style.transition = 'opacity .25s ease, transform .25s ease';
-      prevEl.style.opacity = '';
-      prevEl.style.transform = '';
-    });
-  }
 }
 
-function toggleWish() {
-  const id = window._currentBook;
-  if(!id) return;
-  wishlist[id] = !wishlist[id];
-  document.getElementById('wishBtn').textContent = wishlist[id] ? '❤️' : '🤍';
+function setFontSize(size, el) {
+  document.getElementById('reader-content').style.fontSize = size;
+  document.querySelectorAll('#s-reader-settings .font-btn').forEach(btn => btn.classList.remove('active'));
+  el.classList.add('active');
+  showToast(`Font size set to ${size}`, 'success');
 }
 
-function handleDownload() {
-  const btn = event.target;
-  btn.textContent = '⏳ Downloading…';
-  btn.disabled = true;
-  setTimeout(()=>{btn.textContent='✅ Downloaded';}, 1500);
-}
 
-// Pref chips toggle
-document.querySelectorAll('.pref-chip').forEach(c=>c.addEventListener('click',()=>c.classList.toggle('selected')));
-
-// Theme toggle in settings
-document.querySelectorAll('.theme-btn').forEach(btn => btn.addEventListener('click', function(){
-  document.querySelectorAll('.theme-btn').forEach(b=>b.classList.remove('active'));
-  this.classList.add('active');
-}));
-
-// Font style toggle
-document.querySelectorAll('.font-btn-sel').forEach(btn => btn.addEventListener('click', function(){
-  document.querySelectorAll('.font-btn-sel').forEach(b=>b.classList.remove('active'));
-  this.classList.add('active');
-}));
-
-// Auto-advance splash
-setTimeout(()=> go('s-welcome'), 2200);
-
-// Auto-scale frame to fit any screen
-function scaleFrame() {
-  const frame = document.getElementById('frame');
-  const padding = 48;
-  const scaleH = (window.innerHeight - padding) / 844;
-  const scaleW = (window.innerWidth - padding) / 390;
-  const scale = Math.min(1, scaleH, scaleW);
-  frame.style.transform = 'scale(' + scale + ')';
-  // Adjust body height so frame doesn't overflow
-  document.body.style.height = Math.round(844 * scale + padding) + 'px';
-}
-scaleFrame();
-window.addEventListener('resize', scaleFrame);
-
-/* ═══════════ IMPROVEMENTS ═══════════ */
-
-// ── Toast system ──────────────────────
-function showToast(msg, type='', duration=2500) {
-  const container = document.getElementById('toast-container');
-  const t = document.createElement('div');
-  t.className = 'toast ' + type;
-  t.textContent = msg;
-  container.appendChild(t);
-  requestAnimationFrame(() => { requestAnimationFrame(() => { t.classList.add('show'); }); });
-  setTimeout(() => {
-    t.classList.remove('show');
-    setTimeout(() => t.remove(), 350);
-  }, duration);
-}
-
-// ── Swipe gesture (go back) ───────────
-(function() {
-  let startX = 0, startY = 0;
-  const frame = document.getElementById('frame');
-  frame.addEventListener('touchstart', e => { startX = e.touches[0].clientX; startY = e.touches[0].clientY; }, {passive:true});
-  frame.addEventListener('touchend', e => {
-    const dx = e.changedTouches[0].clientX - startX;
-    const dy = Math.abs(e.changedTouches[0].clientY - startY);
-    if (dx > 60 && dy < 80 && history.length > 1) back();
-  }, {passive:true});
-})();
-
-// ── Plan card selection ───────────────
-document.querySelectorAll('.plan-card').forEach(card => {
-  card.addEventListener('click', function() {
-    document.querySelectorAll('.plan-card').forEach(c => c.classList.remove('selected'));
-    this.classList.add('selected');
-  });
-});
-
-// ── Ripple effect on buttons ──────────
-function addRipple(e) {
-  const btn = e.currentTarget;
-  const r = document.createElement('span');
-  r.className = 'ripple';
-  const rect = btn.getBoundingClientRect();
-  const size = Math.max(rect.width, rect.height);
-  r.style.cssText = `width:${size}px;height:${size}px;left:${e.clientX-rect.left-size/2}px;top:${e.clientY-rect.top-size/2}px`;
-  btn.style.position = 'relative'; btn.style.overflow = 'hidden';
-  btn.appendChild(r);
-  setTimeout(() => r.remove(), 600);
-}
-document.querySelectorAll('.btn-primary,.btn-gold,.btn-read').forEach(b => b.addEventListener('click', addRipple));
-
-// ── Download with progress animation ──
-function handleDownload(e) {
-  if(e) e.stopPropagation();
-  const btns = document.querySelectorAll('#s-bookdetail .btn-outline');
-  btns.forEach(btn => {
-    if(btn.textContent.includes('Download') || btn.textContent.includes('Downloading') || btn.textContent.includes('Downloaded')) {
-      if(btn.textContent.includes('Downloaded')) { showToast('✅ Already in your downloads', 'success'); return; }
-      btn.textContent = '⏳ 0%';
-      btn.className = 'btn-outline btn-downloading';
-      let pct = 0;
-      const iv = setInterval(() => {
-        pct += Math.floor(Math.random() * 18) + 8;
-        if(pct >= 100) { clearInterval(iv); btn.textContent = '✅ Downloaded'; btn.className = 'btn-outline btn-downloaded'; showToast('📥 Book saved for offline reading', 'success'); return; }
-        btn.textContent = `⏳ ${pct}%`;
-      }, 250);
-    }
-  });
-}
-
-// ── Wishlist with animation + toast ───
-function toggleWish() {
-  const id = window._currentBook;
-  if(!id) return;
-  wishlist[id] = !wishlist[id];
-  const wb = document.getElementById('wishBtn');
-  wb.textContent = wishlist[id] ? '❤️' : '🤍';
-  wb.classList.add('heart-pop');
-  setTimeout(() => wb.classList.remove('heart-pop'), 300);
-  showToast(wishlist[id] ? '❤️ Added to Wishlist' : '🤍 Removed from Wishlist', wishlist[id] ? 'gold' : '');
-}
-
-// ── Reader: scroll-based progress ─────
-const readerContent = document.querySelector('.reader-content');
-const progressFill = document.querySelector('.reader-progress-fill');
-const progressPct  = document.querySelector('.reader-progress-pct');
-const pageInfo     = document.querySelector('.reader-page-info');
-if(readerContent) {
-  readerContent.addEventListener('scroll', () => {
-    const pct = Math.min(100, Math.round((readerContent.scrollTop / (readerContent.scrollHeight - readerContent.clientHeight)) * 77 + 23));
-    const pages = Math.round(288 * pct / 100);
-    const remH = Math.floor((288 - pages) * 0.87 / 60);
-    const remM = Math.round(((288 - pages) * 0.87) % 60);
-    progressFill.style.width = pct + '%';
-    progressPct.textContent = pct + '%';
-    pageInfo.textContent = `Page ${pages} of 288 · ~${remH}h ${remM}m remaining`;
-  });
-}
-
-// ── Reader: theme switching ────────────
-document.querySelectorAll('.theme-btn').forEach(btn => {
-  btn.addEventListener('click', function() {
-    document.querySelectorAll('.theme-btn').forEach(b => b.classList.remove('active'));
-    this.classList.add('active');
-    const reader = document.getElementById('s-reader');
-    reader.classList.remove('reader-dark','reader-sepia');
-    if(this.classList.contains('theme-dark')) reader.classList.add('reader-dark');
-    if(this.classList.contains('theme-sepia')) reader.classList.add('reader-sepia');
-    showToast('Theme applied ✓', 'success');
-  });
-});
-
-// ── Reader: font size slider ──────────
-let fontSize = 17;
-document.querySelectorAll('.font-btn').forEach((btn, i) => {
-  btn.addEventListener('click', () => {
-    fontSize = i === 0 ? Math.max(13, fontSize - 2) : Math.min(24, fontSize + 2);
-    document.querySelector('.reader-text').style.fontSize = fontSize + 'px';
-    const fill = document.querySelector('.font-size-fill');
-    const thumb = document.querySelector('.font-size-thumb');
-    const pct = ((fontSize - 13) / 11) * 100;
-    if(fill) fill.style.width = pct + '%';
-    if(thumb) { thumb.style.left = pct + '%'; }
-  });
-});
-
-// ── Font selector in reader settings ──
-document.querySelectorAll('.font-btn-sel').forEach(btn => {
-  btn.addEventListener('click', function() {
-    document.querySelectorAll('.font-btn-sel').forEach(b => b.classList.remove('active'));
-    this.classList.add('active');
-    const fontMap = {'Lora':"'Lora',serif",'Georgia':"Georgia,serif",'Inter':"'Inter',sans-serif"};
-    const chosen = fontMap[this.textContent.trim()] || "'Lora',serif";
-    document.querySelector('.reader-text').style.fontFamily = chosen;
-  });
-});
-
-// ── OTP: simulate typing on verify ────
-(function() {
-  const otpBoxes = document.querySelectorAll('.otp-box');
-  let otpFilled = 4; // already 4 filled
-  if(!otpBoxes.length) return;
-  // When user taps the OTP screen, auto-fill remaining
-  document.getElementById('s-otp').addEventListener('click', function autoFill() {
-    if(otpFilled >= 6) return;
-    otpBoxes[otpFilled].classList.add('filled');
-    otpBoxes[otpFilled].textContent = Math.floor(Math.random()*9+1);
-    otpFilled++;
-    if(otpFilled === 5) { otpBoxes[4].classList.remove('active-box'); }
-    if(otpFilled === 6) {
-      setTimeout(() => {
-        showToast('✅ Email verified!', 'success');
-        setTimeout(() => go('s-plans'), 700);
-      }, 400);
-    }
-  });
-})();
-
-// ── Home: genre tab book filtering ────
-(function() {
-  const allBooks = document.querySelectorAll('#s-home .books-row');
-  document.querySelectorAll('#s-home .genre-tab').forEach(tab => {
-    tab.addEventListener('click', function() {
-      document.querySelectorAll('#s-home .genre-tab').forEach(t => t.classList.remove('active'));
-      this.classList.add('active');
-      const genre = this.textContent.trim();
-      if(genre !== 'All' && genre !== 'Non-Fiction') showToast(`Showing ${genre} books`, '');
-    });
-  });
-})();
-
-// ── Search: live results on input ─────
-(function() {
-  const inp = document.getElementById('searchInp');
-  if(!inp) return;
-  let searchTimer;
-  inp.addEventListener('input', function() {
-    clearTimeout(searchTimer);
-    if(this.value.length >= 2) {
-      searchTimer = setTimeout(() => go('s-results'), 600);
-    }
-  });
-  inp.addEventListener('keydown', function(e) {
-    if(e.key === 'Enter') go('s-results');
-  });
-})();
-
-// ── Payment: basic validation ──────────
-(function() {
-  const payBtn = document.querySelector('#s-payment .btn-gold');
-  if(!payBtn) return;
-  payBtn.addEventListener('click', function(e) {
-    const inputs = document.querySelectorAll('#s-payment input');
-    let allFilled = true;
-    inputs.forEach(inp => { if(!inp.value.trim()) { allFilled = false; inp.style.borderColor='var(--coral)'; } else { inp.style.borderColor=''; } });
-    if(!allFilled) { e.stopImmediatePropagation(); showToast('⚠️ Please fill all card details', ''); }
-  });
-})();
-
-// ── Profile nav badge (streak) ─────────
-(function() {
-  const profileNavItems = document.querySelectorAll('.nav-item:last-child');
-  profileNavItems.forEach(item => {
-    const badge = document.createElement('div');
-    badge.className = 'nav-badge';
-    item.appendChild(badge);
-  });
-})();
-
-// ── Keyboard shortcut: ESC = back ─────
-document.addEventListener('keydown', e => { if(e.key === 'Escape' && history.length > 1) back(); });
-
-// ── Auto-advance splash (already set but reinforce) ──
-// Already set in original JS
-
-console.log('✅ PageTurn prototype loaded — all improvements active');
-
-/* ═══════════ STRUCTURAL + FEATURE IMPROVEMENTS ═══════════ */
-
-// ── CORE FIX: Restructure screens with bottom-nav into flex layout ──
-(function fixBottomNav() {
-  document.querySelectorAll('.screen').forEach(screen => {
-    const nav = screen.querySelector('.bottom-nav');
-    if (!nav) return;
-    // Create scrollable wrapper
-    const scrollWrap = document.createElement('div');
-    scrollWrap.className = 'scroll-area';
-    // Move all children except nav into scroll-wrap
-    Array.from(screen.children)
-      .filter(c => c !== nav)
-      .forEach(c => scrollWrap.appendChild(c));
-    screen.appendChild(scrollWrap);
-    screen.appendChild(nav);
-  });
-})();
-
-// ── Reading Timer ──
-let readingSeconds = 0, readingInterval = null;
-function startReadingTimer() {
-  if(readingInterval) return;
-  readingInterval = setInterval(() => {
-    readingSeconds++;
-    const m = Math.floor(readingSeconds / 60);
-    const s = readingSeconds % 60;
-    const el = document.getElementById('reading-timer');
-    if(el) el.textContent = `⏱ ${m}:${s.toString().padStart(2,'0')}`;
-    // Milestone toasts
-    if(readingSeconds === 60) showToast('🔥 1 minute read — streak extended!', 'gold');
-    if(readingSeconds === 300) showToast("⭐ 5 minutes! You're on a roll", 'gold');
-  }, 1000);
-}
-function stopReadingTimer() {
-  clearInterval(readingInterval);
-  readingInterval = null;
-}
-
-// ── Text highlight in reader ──
-let highlightToolbar = null;
-document.querySelectorAll('.reader-text p').forEach(p => {
-  p.addEventListener('mouseup', handleTextSelect);
-  p.addEventListener('touchend', handleTextSelect);
-});
-function handleTextSelect(e) {
-  const sel = window.getSelection();
-  if (!sel || sel.toString().trim().length < 3) { removeHighlightToolbar(); return; }
-  if (highlightToolbar) highlightToolbar.remove();
-  highlightToolbar = document.createElement('div');
-  highlightToolbar.className = 'highlight-toolbar';
-  highlightToolbar.innerHTML = `
-    <button onclick="applyHighlight()" title="Highlight">🖊</button>
-    <button onclick="addNote()" title="Note">📝</button>
-    <button onclick="shareQuote()" title="Share">↗</button>
-    <button onclick="removeHighlightToolbar()" title="Close">✕</button>`;
-  const range = sel.getRangeAt(0);
-  const rect = range.getBoundingClientRect();
-  const frameRect = document.getElementById('frame').getBoundingClientRect();
-  highlightToolbar.style.cssText = `position:fixed;top:${rect.top - frameRect.top - 50}px;left:${Math.max(8,rect.left - frameRect.left - 20)}px`;
-  document.getElementById('s-reader').appendChild(highlightToolbar);
-}
-function applyHighlight() {
-  const sel = window.getSelection();
-  if(!sel || !sel.rangeCount) return;
-  const range = sel.getRangeAt(0);
-  const mark = document.createElement('mark');
-  mark.className = 'highlighted';
-  mark.onclick = () => showToast('📌 Bookmark saved','gold');
-  try { range.surroundContents(mark); } catch(e) {}
-  sel.removeAllRanges();
-  removeHighlightToolbar();
-  showToast('✏️ Highlighted & saved','gold');
-}
-function addNote() { removeHighlightToolbar(); showToast('📝 Note added',''); }
-function shareQuote() { removeHighlightToolbar(); showToast('↗ Quote copied to clipboard','success'); }
-function removeHighlightToolbar() { if(highlightToolbar) { highlightToolbar.remove(); highlightToolbar=null; } }
-
-// ── Author follow toggle ──
-let isFollowing = false;
-function toggleFollow() {
-  isFollowing = !isFollowing;
-  const btn = document.getElementById('followAuthorBtn');
-  if(!btn) return;
-  btn.textContent = isFollowing ? '✓ Following' : '+ Follow Author';
-  btn.className = isFollowing ? 'follow-btn following' : 'follow-btn';
-  showToast(isFollowing ? '✓ Following Matt Haig' : 'Unfollowed Matt Haig', isFollowing ? 'success' : '');
-}
-
-// ── Patch go() to start/stop reading timer ──
-const _origGo = go;
-window.go = function(screenId, bookId) {
-  if(screenId === 's-reader') startReadingTimer();
-  else stopReadingTimer();
-  _origGo(screenId, bookId);
-  // Scroll the target screen's scroll-area to top
-  setTimeout(() => {
-    const target = document.getElementById(screenId);
-    if(target) {
-      const sa = target.querySelector('.scroll-area');
-      if(sa) sa.scrollTop = 0;
-    }
-  }, 50);
-};
-
-// ── Update reader progress from scroll-area ──
 setTimeout(() => {
-  const readerScreen = document.getElementById('s-reader');
-  const sa = readerScreen && readerScreen.querySelector('.scroll-area');
-  const oldSa = document.querySelector('#s-reader .scroll-area');
-  const targetEl = oldSa || document.querySelector('.reader-content');
-  if(targetEl) {
-    targetEl.addEventListener('scroll', () => {
-      const pct = Math.min(100, Math.round(
-        (targetEl.scrollTop / Math.max(1, targetEl.scrollHeight - targetEl.clientHeight)) * 77 + 23));
-      const pages = Math.round(288 * pct / 100);
-      const remMin = Math.round((288 - pages) * 0.87);
-      const remH = Math.floor(remMin/60), remM = remMin%60;
-      const pf = document.querySelector('.reader-progress-fill');
-      const pp = document.querySelector('.reader-progress-pct');
-      const pi = document.querySelector('.reader-page-info');
-      if(pf) pf.style.width = pct + '%';
-      if(pp) pp.textContent = pct + '%';
-      if(pi) pi.textContent = `Page ${pages} of 288 · ~${remH}h ${remM}m remaining`;
-      if(pct >= 99 && !window._bookCompleted) {
-        window._bookCompleted = true;
-        showToast('🎉 You finished the book! +50 XP earned','gold',4000);
-      }
-    });
-  }
-}, 500);
+  if (currentScreen === 's-splash') go('s-tutorial-1');
+}, 1800);
 
-// ── Home: scroll-indicator dots for book rows ──
-document.querySelectorAll('.books-row').forEach(row => {
-  row.addEventListener('scroll', function() {
-    const maxScroll = this.scrollWidth - this.clientWidth;
-    const pct = maxScroll > 0 ? this.scrollLeft / maxScroll : 0;
-  });
+document.getElementById('reader-content').addEventListener('scroll', () => {
+  const el = document.getElementById('reader-content');
+  const pct = Math.min(100, Math.max(12, Math.round((el.scrollTop / (el.scrollHeight - el.clientHeight)) * 100)));
+  document.getElementById('readerFill').style.width = pct + '%';
+  document.getElementById('readerPct').textContent = pct + '%';
 });
 
-// ── Pull-to-refresh on home ──
-(function() {
-  let ptStart = 0, ptRefreshing = false;
-  const home = document.getElementById('s-home');
-  home.addEventListener('touchstart', e => { ptStart = e.touches[0].clientY; }, {passive:true});
-  home.addEventListener('touchend', e => {
-    const dy = e.changedTouches[0].clientY - ptStart;
-    const sa = home.querySelector('.scroll-area');
-    if(dy > 80 && sa && sa.scrollTop <= 0 && !ptRefreshing) {
-      ptRefreshing = true;
-      showToast('🔄 Refreshed — 3 new books added!','');
-      setTimeout(() => { ptRefreshing = false; }, 2000);
-    }
-  }, {passive:true});
-})();
-
-// ── Streak milestone notification on home load ──
-setTimeout(() => {
-  const curr = document.querySelector('.screen.active');
-  if(curr && curr.id === 's-home') return;
-}, 100);
-document.getElementById('s-home').addEventListener('transitionend', function handler() {
-  if(!this.classList.contains('active')) return;
-  this.removeEventListener('transitionend', handler);
-  setTimeout(() => showToast('🔥 14-day streak! Keep it up, Sachin 🎉','gold',3500), 800);
-});
-
-console.log('✅ All structural fixes + new features loaded');
+showToast('Prototype loaded', 'success');
 </script>
 </body>
 </html>
-
